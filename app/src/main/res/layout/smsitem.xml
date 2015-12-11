@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/themecolor"
+    android:orientation="vertical"
+    android:id="@+id/parent"
+    tools:context="com.example.administrator.task.ManageActivity">
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tv1"
+        android:textColor="@color/white"
+        android:layout_width="fill_parent"
+        android:singleLine="true"
+        android:textSize="20dp"
+        android:layout_height="40dp"/>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tv2"
+        android:textColor="@color/white"
+        android:layout_width="fill_parent"
+        android:singleLine="true"
+        android:textSize="15dp"
+        android:layout_height="40dp"/>
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@color/light_grey"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="400px"
+        android:id="@+id/comment_reply_input"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/comment_reply_submit"
+
+        android:text="Submit"
+        android:textColor="#008B8B"
+        android:textSize="20sp"
+
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:background="@drawable/mybutton"
+        />
+
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/response_scroll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical"
+    android:background="@color/themecolor"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+
+
+
+        <TextView
+            android:text="@string/app_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:textColor="#FFFFFF"
+            android:paddingBottom = "20sp"
+            android:paddingTop = "200sp"
+            />
+        <TextView
+            android:text="@string/app_slogen"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:paddingBottom = "150sp"
+            />
+
+        <!--<Button-->
+            <!--android:id="@+id/view_all_images"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="View All Stream"-->
+            <!--android:onClick="viewAllImages"-->
+            <!--android:enabled="false"-->
+            <!--/>-->
+
+        <!--<Button-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="upload"-->
+        <!--android:clickable="false"-->
+        <!--android:id="@+id/open_image_upload_page"/>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="2dip">
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dip"
+                android:layout_weight="1"
+                android:enabled="false" />
+
+            <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sign-out"
+            android:layout_weight="1"
+            android:enabled="false" />
+
+            <!--<Button-->
+            <!--android:id="@+id/revoke_access_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="revoke"-->
+            <!--android:layout_weight="1"-->
+            <!--android:enabled="false" />-->
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/sign_in_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
+            android:paddingTop="60sp"
+            android:text="signed out" />
+    </LinearLayout>
+</ScrollView>
