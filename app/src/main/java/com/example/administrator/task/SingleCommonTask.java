@@ -69,7 +69,7 @@ public class SingleCommonTask extends ActionBarActivity implements View.OnClickL
 
         Intent intent = getIntent();
         TaskId = intent.getIntExtra("CTaskID", 0);
-        accountName = intent.getStringExtra("Account");
+        accountName = intent.getStringExtra("account");
         System.out.println(TaskId);
 
         TextView Description = (TextView) findViewById(R.id.collapseDes);

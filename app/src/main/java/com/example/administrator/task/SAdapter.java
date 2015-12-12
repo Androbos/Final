@@ -61,10 +61,14 @@ public class SAdapter extends ArrayAdapter<String> {
                 holder.IView.setImageResource(R.drawable.ic_crop_free_white_24dp);
             }else if (position == 4) {
                 holder.IView.setImageResource(R.drawable.ic_fiber_new_white_18dp);
-            }else if (position == 5) {
+            }else if (position == 7) {
                 holder.IView.setImageResource(R.drawable.ic_person_outline_white_18dp);
             }else if (position == 2) {
                 holder.IView.setImageResource(R.drawable.ic_compare_arrows_white_18dp);
+            }else if (position == 6) {
+                holder.IView.setImageResource(R.drawable.ic_settings_white_18dp);
+            }else if (position == 5) {
+                holder.IView.setImageResource(R.drawable.ic_list_white_18dp);
             }
         }
 

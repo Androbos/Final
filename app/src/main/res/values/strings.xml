@@ -33,4 +33,6 @@
     <string name="title_activity_search">search</string>
     <string name="title_activity_suggestion">Suggestion</string>
     <string name="title_activity_relative">relative</string>
+    <string name="title_activity_setting">Setting</string>
+    <string name="title_activity_mycommontask">mycommontask</string>
 </resources>

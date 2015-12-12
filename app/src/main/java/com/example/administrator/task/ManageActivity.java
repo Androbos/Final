@@ -169,7 +169,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
             SlidingMenu menu = new SlidingMenu(this);
             menu.setMode(SlidingMenu.RIGHT);
             menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-            menu.setBehindOffset(500);
+            menu.setBehindOffset(400);
             menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
             menu.setMenu(R.layout.slidemenu);
 
@@ -180,6 +180,8 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
             values.add("Relative Task");
             values.add("QR Code Scan");
             values.add("Create Task");
+            values.add("Task I Created");
+            values.add("Setting");
             values.add("Log out");
             SAdapter adapter = new SAdapter(this,values);
 
@@ -219,10 +221,26 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
+                    }else if(position==5) {
+                        Intent intent = new Intent(ManageActivity.this, mycommontask.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("account", accountName);
+                        intent.putExtras(bundle);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                    }else if(position==6){
+                        Intent intent= new Intent(ManageActivity.this, Setting.class);
+                        Bundle bundle=new Bundle();
+                        bundle.putString("account", accountName);
+                        intent.putExtras(bundle);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
                     }else if(position==4){
                         DialogFragment newFragment = new CreateTaskSelect();
                         newFragment.show(getSupportFragmentManager(), "CREATE");
-                    }else if(position==5){
+                    }else if(position==7){
                         if (mGoogleApiClient.isConnected()) {
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                             mGoogleApiClient.disconnect();

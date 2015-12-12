@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import android.os.Vibrator;
 
 public class TimeService extends Service {
 
@@ -125,6 +126,9 @@ public class TimeService extends Service {
                                 PowerManager.WakeLock mWakeLock = pm.newWakeLock((PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "YourServie");
                                 mWakeLock.acquire();
                                 showBox(com.example.administrator.task.TimeService.this, id.getInt(i), name.getString(i));
+                                Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                // Vibrate for 500 milliseconds
+                                v.vibrate(2000);
                                 System.out.println("remind");
                                 mWakeLock.release();
                             }
