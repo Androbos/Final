@@ -80,6 +80,7 @@ public class CreateCommonTask extends ActionBarActivity implements View.OnClickL
         Button btn1 = (Button) findViewById(R.id.button1);
         Button btn2 = (Button) findViewById(R.id.button2);
         c = Calendar.getInstance();
+        final int[] y = {0,0,0};
 
         btn1.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -92,8 +93,20 @@ public class CreateCommonTask extends ActionBarActivity implements View.OnClickL
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
                                 TextView text = (TextView) findViewById(R.id.taskdue);
-                                monthOfYear+=1;
-                                String tmp2 = String.valueOf(year)+"-"+String.valueOf(monthOfYear)+"-"+String.valueOf(dayOfMonth);
+
+                                monthOfYear += 1;
+                                y[0] = year;
+                                y[1] = monthOfYear;
+                                y[2] = dayOfMonth;
+                                String month0 = String.valueOf(y[1]);
+                                String day0 = String.valueOf(y[2]);
+                                if (y[1] < 10) {
+                                    month0 = "0" + String.valueOf(y[1]);
+                                }
+                                if (y[2] < 10) {
+                                    day0 = "0" + String.valueOf(y[2]);
+                                }
+                                String tmp2 = String.valueOf(year) + "-" + month0 + "-" + day0;
                                 text.setText(tmp2);
                             }
                         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
@@ -112,10 +125,22 @@ public class CreateCommonTask extends ActionBarActivity implements View.OnClickL
                                 // TODO Auto-generated method stub
                                 TextView text = (TextView) findViewById(R.id.taskdue);
                                 String minute0=String.valueOf(minute);
+                                String month0=String.valueOf(y[1]);
+                                String day0=String.valueOf(y[2]);
+                                String hour0=String.valueOf(hourOfDay);
                                 if(minute<10){
                                     minute0="0"+String.valueOf(minute);
                                 }
-                                String tmp=String.valueOf(c.get(Calendar.YEAR))+"-"+String.valueOf(c.get(Calendar.MONTH)+1)+"-"+String.valueOf(c.get(Calendar.DAY_OF_MONTH))+" "+String.valueOf(hourOfDay)+":"+ minute0;
+                                if(y[1]<10){
+                                    month0="0"+String.valueOf(y[1]);
+                                }
+                                if(y[2]<10){
+                                    day0="0"+String.valueOf(y[2]);
+                                }
+                                if(hourOfDay<10){
+                                    hour0="0"+String.valueOf(hourOfDay);
+                                }
+                                String tmp=String.valueOf(y[0])+"-"+month0+"-"+day0+" "+hour0+":"+ minute0;
                                 text.setText(tmp);
                             }
                         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
