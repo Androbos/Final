@@ -15,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dip"
-        android:textSize="40sp"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"
         android:textColor="@color/orange"
         android:text="New Common Task" />
 
@@ -110,14 +111,5 @@
         android:id="@+id/createC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/createCdebug"
-        android:gravity="bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dip"
-        android:textSize="30sp"
-        android:text="User" />
 
 </LinearLayout>

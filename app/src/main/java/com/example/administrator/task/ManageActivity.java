@@ -22,6 +22,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.ViewGroup;
@@ -49,11 +50,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.readystatesoftware.viewbadger.BadgeView;
 
 import org.apache.http.conn.params.ConnManagerPNames;
 import org.json.JSONArray;
@@ -66,7 +70,8 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class ManageActivity extends ActionBarActivity implements ResultCallback<People.LoadPeopleResult>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnClickListener {
+public class ManageActivity extends ActionBarActivity implements ResultCallback<People.LoadPeopleResult>,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnClickListener {
 
     public static Activity self;
 
@@ -76,13 +81,17 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
     private PullToRefreshLayout mPullToRefreshLayout;
     ListView listView ;
-
+    TextView reminder;
+    String email;
 
     Context context = this;
     ArrayList<String> PTask = new ArrayList<String>();
     ArrayList<Integer> PTaskid =new ArrayList<Integer>();
     ArrayList<String> CTask = new ArrayList<String>();
     ArrayList<Integer> CTaskid = new ArrayList<Integer>();
+
+    ArrayList<String> sender = new ArrayList<String>();
+    ArrayList<Integer> newmsgtaskid = new ArrayList<Integer>();
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -106,6 +115,23 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
         Intent intentstream = getIntent();
         accountName =intentstream.getStringExtra("account");
+
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ManageActivity.this,ManageActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                self.finish();
+            }
+        });
+
 //        TextView mDebug = (TextView) findViewById(R.id.managedebug);
 //        mDebug.setText(accountName);
 //        System.out.println("account:"+accountName);
@@ -201,10 +227,12 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         Bundle bundle=new Bundle();
                         bundle.putString("Searchname","     x    ");
                         bundle.putString("account", accountName);
+                        bundle.putString("email",email);
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }else if(position==1){
                         Intent intent= new Intent(ManageActivity.this, Suggestion.class);
                         Bundle bundle=new Bundle();
@@ -212,23 +240,28 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }else if(position==2){
                         Intent intent= new Intent(ManageActivity.this, relative.class);
                         Bundle bundle=new Bundle();
                         bundle.putString("account", accountName);
+                        bundle.putString("email",email);
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }else if(position==5) {
                         Intent intent = new Intent(ManageActivity.this, mycommontask.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("account", accountName);
+                        bundle.putString("email",email);
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }else if(position==6){
                         Intent intent= new Intent(ManageActivity.this, Setting.class);
                         Bundle bundle=new Bundle();
@@ -236,7 +269,8 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }else if(position==4){
                         DialogFragment newFragment = new CreateTaskSelect();
                         newFragment.show(getSupportFragmentManager(), "CREATE");
@@ -249,7 +283,8 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                             System.err.println("LOG OUT ^^^^^^^^^^^^^^^^^^^^ SUCESS");
                             Intent intent= new Intent(ManageActivity.this, MainActivity.class);
                             startActivity(intent);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
                             ManageActivity.this.finish();
                         }
                     }
@@ -276,6 +311,19 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         JSONArray PrivateTask = new JSONArray();
                         JSONArray PrivateTaskId = new JSONArray();
 
+                        JSONArray Sender = new JSONArray();
+                        JSONArray newmsg = new JSONArray();
+
+                        if(!jObject.isNull("newmsgtaskid")){
+                            newmsg = jObject.getJSONArray("newmsgtaskid");
+                        }
+                        if(!jObject.isNull("sender")){
+                            Sender =jObject.getJSONArray("sender");
+                        }
+                        for(int i = 0; i < Sender.length(); i++){
+                            sender.add(Sender.getString(i));
+                            newmsgtaskid.add(newmsg.getInt(i));
+                        }
 
                         System.out.println(jObject.isNull("jointaskname"));
                         System.out.println(jObject.isNull("pritaskname"));
@@ -383,6 +431,35 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         }
                     }
 
+                    // remindpart
+                    reminder=(TextView)findViewById(R.id.replyremind);
+
+
+                    if (sender.size()!=0){
+                        reminder.setVisibility(View.VISIBLE);
+                        reminder.setText("New Messages");
+                        BadgeView badge = new BadgeView(ManageActivity.this, reminder);
+                        badge.setText(String.valueOf(sender.size()));
+                        badge.show();
+                        reminder.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent= new Intent(ManageActivity.this, newmsg.class);
+                                Bundle bundle=new Bundle();
+                                bundle.putString("account", accountName);
+                                bundle.putStringArrayList("sender", sender);
+                                bundle.putIntegerArrayList("newmsgtaskid", newmsgtaskid);
+                                bundle.putString("email", email);
+                                intent.putExtras(bundle);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.push_right_in,
+                                        R.anim.push_left_out);
+                            }
+                        });
+                    }
+
+
                 }
 
                 @Override
@@ -390,10 +467,15 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                     Log.e("ManagePage", "There was a problem in retrieving the url : " + e.toString());
                 }
             });
+
+            //update profile
+
         }
         else{
             Intent intent= new Intent(this, ManageActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
         }
     }
 
@@ -427,16 +509,23 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
             case R.id.PTR1:
-                intent= new Intent(this, SinglePrivateTask.class);
-                bundle=new Bundle();
-                bundle.putInt("PTaskID", PTaskid.get(0));
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                break;
+                if(PTaskid.size()==0){
+                    break;
+                }else {
+                    intent = new Intent(this, SinglePrivateTask.class);
+                    bundle = new Bundle();
+                    bundle.putInt("PTaskID", PTaskid.get(0));
+                    intent.putExtras(bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    break;
+                }
             case 101:
                 intent= new Intent(this, SinglePrivateTask.class);
                 bundle=new Bundle();
@@ -444,6 +533,8 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
             case 102:
                 intent= new Intent(this, SinglePrivateTask.class);
@@ -452,41 +543,62 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
             case 201:
                 intent= new Intent(this, SingleCommonTask.class);
                 bundle=new Bundle();
                 bundle.putInt("CTaskID",CTaskid.get(1));
                 bundle.putString("account", accountName);
+                bundle.putBoolean("hasJoined", true);
+                bundle.putString("email",email);
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
             case 202:
                 intent= new Intent(this, SingleCommonTask.class);
                 bundle=new Bundle();
                 bundle.putInt("CTaskID",CTaskid.get(2));
                 bundle.putString("account", accountName);
+                bundle.putBoolean("hasJoined", true);
+                bundle.putString("email",email);
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
             case R.id.CTR1:
-                intent= new Intent(this, SingleCommonTask.class);
-                bundle=new Bundle();
-                bundle.putInt("CTaskID", CTaskid.get(0));
-                bundle.putString("account", accountName);
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                break;
+                if(CTaskid.size()==0){
+                    break;
+                }else {
+                    intent = new Intent(this, SingleCommonTask.class);
+                    bundle = new Bundle();
+                    bundle.putInt("CTaskID", CTaskid.get(0));
+                    bundle.putString("account", accountName);
+                    bundle.putBoolean("hasJoined", true);
+                    bundle.putString("email",email);
+                    intent.putExtras(bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    break;
+                }
             case R.id.Cmore:
                 intent= new Intent(this, AllCommon.class);
                 bundle= new Bundle();
                 bundle.putString("account", accountName);
+                bundle.putString("email",email);
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
                 break;
         }
 
@@ -500,6 +612,32 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
         // updateUI(true);
         Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
+
+        final Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        String iconurl=currentUser.getImage().getUrl();
+        String dob=currentUser.getBirthday();
+        int gender = currentUser.getGender();
+
+        RequestParams params = new RequestParams();
+        params.put("profileurl", iconurl);
+        params.put("gender", gender);
+        params.put("dob", dob);
+        params.put("userid",accountName);
+        params.put("email",email);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post("http://task-1123.appspot.com/updatesetting", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
+                Log.w("async", "success!!!!");
+//                Toast.makeText(context, "Upload Successful", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
+                Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
+            }
+        });
     }
 
 
@@ -508,12 +646,28 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            System.out.println(scanContent);
-            Intent httpIntent = new Intent(Intent.ACTION_VIEW);
-            httpIntent.setData(Uri.parse(scanContent));
 
-            startActivity(httpIntent);
+            if(!scanContent.contains("http")){
+                intent= new Intent(this, SingleCommonTask.class);
+                Bundle bundle= new Bundle();
+                bundle.putString("account", accountName);
+                bundle.putInt("CTaskID", Integer.valueOf(scanContent));
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+
+            }else{
+                System.out.println(scanContent);
+                Intent httpIntent = new Intent(Intent.ACTION_VIEW);
+                httpIntent.setData(Uri.parse(scanContent));
+
+                startActivity(httpIntent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+            }
+
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -559,7 +713,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.Theme_Holo_Dialog_Alert);
             builder.setMessage(R.string.tasktype)
                     .setPositiveButton(R.string.common_task, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -571,12 +725,10 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                             self.finish();
                         }
                     })
-
-
                     .setNegativeButton(R.string.private_task, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(getActivity(), com.example.administrator.task.CreatePrivateTask.class);
-                            Bundle bundle=new Bundle();
+                            Bundle bundle = new Bundle();
                             bundle.putString("account", accountName);
                             intent.putExtras(bundle);
                             startActivity(intent);
@@ -595,9 +747,9 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
             Button pButton =  ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_POSITIVE);
             Button nButton =  ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_NEGATIVE);
 //        ((AlertDialog) getDialog()).getWindow().setTitleColor(getResources().getColor(R.color.orange));
-            pButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
+//            pButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
             pButton.setTextColor(getResources().getColor(R.color.white));
-            nButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
+//            nButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
             nButton.setTextColor(getResources().getColor(R.color.white));
         }
     }
@@ -605,6 +757,19 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
     @Override
     protected void onDestroy(){
         super.onDestroy();
+    }
+
+    //BACK
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+
+            this.finish();  //finish当前activity
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

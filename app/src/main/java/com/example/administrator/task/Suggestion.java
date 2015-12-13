@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -43,12 +44,27 @@ public class Suggestion extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestion);
-
-        ActionBar bar = getActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
-
         Intent intentstream = getIntent();
         accountName =intentstream.getStringExtra("account");
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Suggestion.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
+
+
 
         final ListView lv = (ListView) findViewById(R.id.suggestlist);
 
@@ -184,7 +200,22 @@ public class Suggestion extends Activity {
 
         });
 
+        final TextView load =(TextView) findViewById(R.id.loading);
+        load.setVisibility(View.GONE);
 
+
+    }
+    //BACK
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+
+            this.finish();  //finish当前activity
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

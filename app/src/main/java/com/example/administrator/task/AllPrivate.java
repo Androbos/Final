@@ -1,14 +1,19 @@
 
 package com.example.administrator.task;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -69,6 +74,11 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
     final ArrayList<Integer> PTaskID2 = new ArrayList<Integer>();
     final private ArrayList<String> PTask3 = new ArrayList<String>();
     final ArrayList<Integer> PTaskID3 = new ArrayList<Integer>();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +90,24 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
         Intent intentstream = getIntent();
         accountName = intentstream.getStringExtra("account");
 
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AllPrivate.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
+
         TextView User = (TextView)findViewById(R.id.allpdebug);
         User.setText(accountName);
 
@@ -88,7 +116,6 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
         httpClient.get(request_url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
-
 
                 try {
 
@@ -161,19 +188,12 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
                     lp.height = 120*mMessageItems2.size();
                     mListViewfinish.setLayoutParams(lp);
 
-//                    View w = SB.getView(0,null, mListViewfinish);
-//                    View v = findViewByIdViewById(R.id.holder1);
-//                    v.setClickable(false);
-//                    v.setBackgroundColor(getResources().getColor(R.color.themecolor));
-
-
                     SC = new SlideAdapter(mMessageItems3);
                     mListViewoverdue.setAdapter(SC);
                     mListViewoverdue.setOnItemClickListener(AllPrivate.this);
                     lp = mListViewoverdue.getLayoutParams();
                     lp.height = 120*mMessageItems3.size();
                     mListViewoverdue.setLayoutParams(lp);
-
 
                 } catch (JSONException j) {
                     System.out.println("JSON Error");
@@ -296,6 +316,8 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
                 bundle.putInt("PTaskID", PTaskID1.get(P));
                 intent.putExtras(bundle);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
             }
         }else if(viewnumber==1){
             if(!mListViewfinish.isScroll){
@@ -307,6 +329,8 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
                 bundle.putInt("PTaskID", PTaskID2.get(P));
                 intent.putExtras(bundle);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
             }
 
         }else if(viewnumber==2){
@@ -319,6 +343,8 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
                 bundle.putInt("PTaskID", PTaskID3.get(P));
                 intent.putExtras(bundle);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
             }
         }
     }
@@ -405,7 +431,10 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
             intent.putExtras(bundle);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
             this.finish();
+
 
         }
         else if (v.getId() == R.id.holder1){
@@ -466,9 +495,21 @@ public class AllPrivate extends ActionBarActivity implements AdapterView.OnItemC
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
             overridePendingTransition(0, 0);
-//            this.finish();
+            this.finish();
 
         }
+    }
+    //BACK
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+
+            this.finish();  //finish当前activity
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

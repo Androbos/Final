@@ -8,12 +8,24 @@
 
 
     <style name="AlertDialogCustom" parent="@android:style/Theme.Holo.Light.Dialog">
-
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:typeface">monospace</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">10sp</item>
         <!--<item name="android:background">#045864</item>-->
+    </style>
+
+    <style name="Theme_Holo_Dialog_Alert" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle_Holo</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+    <style name="DialogWindowTitle_Holo">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
     </style>
 
 </resources>

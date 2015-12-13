@@ -21,7 +21,7 @@ import java.util.Map;
 public class ExpendableCommentAdapter extends BaseExpandableListAdapter {
 
     private Activity context;
-//    private Map<myComment, ArrayList<Reply>> Comment;
+    //    private Map<myComment, ArrayList<Reply>> Comment;
     private ArrayList<myComment> Comments;
 
     public ExpendableCommentAdapter(Activity context_, ArrayList<myComment> Comments_){
@@ -46,11 +46,13 @@ public class ExpendableCommentAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.reply_item, null);
         }
-
+        TextView ReplyCreator = (TextView) convertView.findViewById(R.id.reply_creator);
         TextView ReplyContent = (TextView) convertView.findViewById(R.id.reply_content);
         TextView ReplyTime = (TextView) convertView.findViewById(R.id.reply_time);
-        ReplyContent.setText(oneReply.Creator+" @"+oneReply.ReplyTo+" : "+oneReply.Content);
+        ReplyCreator.setText(oneReply.Creator);
+        ReplyContent.setText(" @"+oneReply.ReplyTo+" : "+oneReply.Content);
         ReplyTime.setText(oneReply.ReplyTime);
+//        convertView.setOnClickListener((View.OnClickListener)context);
         return convertView;
     }
 

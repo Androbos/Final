@@ -96,6 +96,9 @@ public class TimeService extends Service {
                         JSONArray re = new JSONArray();
                         JSONArray name = new JSONArray();
                         JSONArray id = new JSONArray();
+                        JSONArray cre = new JSONArray();
+                        JSONArray cname = new JSONArray();
+                        JSONArray cid = new JSONArray();
 
                         if (!jObject.isNull("priremind")) {
                             id = jObject.getJSONArray("pritaskid");
@@ -107,6 +110,17 @@ public class TimeService extends Service {
 
                         if (!jObject.isNull("pritaskname")) {
                             name = jObject.getJSONArray("pritaskname");
+                        }
+                        if (!jObject.isNull("priremind")) {
+                            cid = jObject.getJSONArray("remindid");
+                        }
+
+                        if (!jObject.isNull("priremind")) {
+                            cre = jObject.getJSONArray("reminddue");
+                        }
+
+                        if (!jObject.isNull("pritaskname")) {
+                            cname = jObject.getJSONArray("remindname");
                         }
 
                         Calendar now = Calendar.getInstance();
@@ -121,11 +135,33 @@ public class TimeService extends Service {
                             }
                             cal.setTime(sdf.parse(tmp));// all done)
 
-                            if(now.getTime().toString().equals(cal.getTime().toString())) {
+                            if (now.getTime().toString().equals(cal.getTime().toString())) {
                                 PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
                                 PowerManager.WakeLock mWakeLock = pm.newWakeLock((PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "YourServie");
                                 mWakeLock.acquire();
                                 showBox(com.example.administrator.task.TimeService.this, id.getInt(i), name.getString(i));
+                                Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                // Vibrate for 500 milliseconds
+                                v.vibrate(2000);
+                                System.out.println("remind");
+                                mWakeLock.release();
+                            }
+                        }
+
+                        for (int j = 0; j < cname.length(); j++) {
+                            String tmp = cre.getString(j);
+                            Calendar cal = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            if (tmp.equals("null")) {
+                                continue;
+                            }
+                            cal.setTime(sdf.parse(tmp));// all done)
+
+                            if (now.getTime().toString().equals(cal.getTime().toString())) {
+                                PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
+                                PowerManager.WakeLock mWakeLock = pm.newWakeLock((PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "YourServie");
+                                mWakeLock.acquire();
+                                showBox(com.example.administrator.task.TimeService.this, cid.getInt(j), cname.getString(j));
                                 Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                                 // Vibrate for 500 milliseconds
                                 v.vibrate(2000);

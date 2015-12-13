@@ -15,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dip"
-        android:textSize="40sp"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"
         android:textColor="@color/orange"
         android:text="Edit Private Task" />
 

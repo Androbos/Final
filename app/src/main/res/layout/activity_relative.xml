@@ -5,12 +5,24 @@
     android:layout_height="fill_parent"
     android:background="@color/themecolor"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/loading"
+        android:clickable="true"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="3dip"
+        android:textSize="30sp"
+        android:textColor="@color/orange"
+        android:text="Loading..." />
+
     <TextView
         android:layout_width="match_parent"
         android:id="@+id/ptaskname"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dip"
-        android:layout_alignParentLeft="true"
+        android:gravity="center_horizontal"
         android:textSize="40sp"
         android:textColor="@color/orange"
         android:text="Relative Task" />

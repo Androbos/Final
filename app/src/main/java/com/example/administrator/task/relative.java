@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -36,7 +37,9 @@ import java.util.ArrayList;
 public class relative extends Activity {
 
     String accountName;
+    String email;
     ArrayList<Integer> taskid = new ArrayList<Integer>();
+    ArrayList<Integer> subtaskid = new ArrayList<Integer>();
     ArrayList<String> taskname = new ArrayList<String>();
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,12 +52,28 @@ public class relative extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relative);
-
-        ActionBar bar = getActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
-
         Intent intentstream = getIntent();
         accountName =intentstream.getStringExtra("account");
+        email=intentstream.getStringExtra("email");
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(relative.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
+
+
 
         final ListView listView = (ListView) findViewById(R.id.relativelist);
 
@@ -70,6 +89,7 @@ public class relative extends Activity {
                     JSONObject jObject = new JSONObject(new String(response));
                     JSONArray id = new JSONArray();
                     JSONArray name = new JSONArray();
+                    JSONArray Jsubtaskid=new JSONArray();
 
                     if (!jObject.isNull("taskid")) {
                         id = jObject.getJSONArray("taskid");
@@ -78,6 +98,14 @@ public class relative extends Activity {
                     if (!jObject.isNull("taskname")) {
                         name = jObject.getJSONArray("taskname");
                     }
+                    if (!jObject.isNull("subtaskid")) {
+                        Jsubtaskid = jObject.getJSONArray("subtaskid");
+                    }
+
+                    for (int j = 0; j < Jsubtaskid.length(); j++) {
+                        subtaskid.add(Jsubtaskid.getInt(j));
+                    }
+
 
                     for (int i = 0; i < name.length(); i++) {
                         taskname.add(name.getString(i));
@@ -106,12 +134,22 @@ public class relative extends Activity {
                         Bundle bundle = new Bundle();
                         bundle.putString("account", accountName);
                         bundle.putInt("CTaskID", itemValue);
+                        bundle.putString("email",email);
+                        if(subtaskid.contains(itemValue)){
+                            bundle.putBoolean("hasJoined",true);
+                        }else{
+                            bundle.putBoolean("hasJoined",false);
+                        }
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.push_right_in,
+                                R.anim.push_left_out);
                     }
                 });
+
+                final TextView load =(TextView) findViewById(R.id.loading);
+                load.setVisibility(View.GONE);
 
             }
 
@@ -122,6 +160,18 @@ public class relative extends Activity {
         });
 //=============================
 
+    }
+    //BACK
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+
+            this.finish();  //finish当前activity
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

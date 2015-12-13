@@ -1,12 +1,17 @@
 package com.example.administrator.task;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -52,14 +57,39 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
     Calendar c;
     //    String PTaskCreateTime;
 //    Integer PTaskFinished;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_private_task);
 
-
         Intent intent = getIntent();
         PTaskID = intent.getIntExtra("taskid",0);
+        accountName=intent.getStringExtra("account");
+
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditPrivateTask.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
+
+
 //        TextView User = (TextView)findViewById(R.id.createPdebug);
 //        User.setText(accountName);
 
@@ -182,7 +212,7 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
 //        params.put("creator", accountName);
         params.put("description", PTaskDiscription);
         params.put("due", PTaskDue);
-        params.put("taskid",PTaskID);
+        params.put("taskid", PTaskID);
         params.put("d", dd);
         params.put("h", hh);
         params.put("m", mm);
@@ -191,6 +221,16 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
                 Toast.makeText(context, "Update Successful", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(EditPrivateTask.this, SinglePrivateTask.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("PTaskID", PTaskID);
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                EditPrivateTask.this.finish();
             }
 
             @Override
@@ -199,10 +239,18 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
             }
         });
 
-        Intent intent= new Intent(this, SinglePrivateTask.class);
-        Bundle bundle=new Bundle();
-        bundle.putInt("PTaskID", PTaskID);
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+    }
+    //BACK
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== KeyEvent.KEYCODE_BACK){
+
+            this.finish();  //finish当前activity
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_left_out);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class search extends ActionBarActivity {
     Button btn;
     EditText ET;
     String searchthistime;
+    String email;
 
     ArrayList<String> taskname = new ArrayList<String>();
     ArrayList<Integer> taskid =new ArrayList<Integer>();
@@ -52,14 +54,30 @@ public class search extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
-        ActionBar bar = getActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
-
-
         Intent intentstream = getIntent();
         accountName =intentstream.getStringExtra("account");
         searchname =intentstream.getStringExtra("Searchname");
+        email = intentstream.getStringExtra("email");
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(search.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
+
+
+
 
 
         final String request_url = "http://task-1123.appspot.com/searchtask?searchname="+searchname;
@@ -104,20 +122,53 @@ public class search extends ActionBarActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
+                                            final int position, long id) {
 
-                        Integer itemValue = taskid.get(position);
+                        final String request_url_j = "http://task-1123.appspot.com/viewmytask?userid="+accountName;
+                        AsyncHttpClient httpClient_j = new AsyncHttpClient();
+                        httpClient_j.get(request_url_j, new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode_j, cz.msebera.android.httpclient.Header[] headers_j, byte[] response_j) {
 
-                        Intent intent = new Intent(search.this, SingleCommonTask.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("account", accountName);
-                        bundle.putInt("CTaskID", itemValue);
-                        intent.putExtras(bundle);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
+
+                                try {
+
+                                    JSONObject jObject_j = new JSONObject(new String(response_j));
+                                    JSONArray Jtaskid = new JSONArray();
+                                    ArrayList<Integer> JoinedTaskId = new ArrayList<Integer>();
+                                    if (!jObject_j.isNull("jointaskid")) {
+                                        Jtaskid = jObject_j.getJSONArray("jointaskid");
+                                    }
+                                    for (int i = 0; i < Jtaskid.length(); i++) {
+                                        JoinedTaskId.add(Jtaskid.getInt(i));
+                                    }
+                                    Integer itemValue = taskid.get(position);
+                                    Intent intent = new Intent(search.this, SingleCommonTask.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("account", accountName);
+                                    bundle.putInt("CTaskID", itemValue);
+                                    bundle.putString("email", email);
+                                    bundle.putBoolean("hasJoined", JoinedTaskId.contains(itemValue));
+                                    intent.putExtras(bundle);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(intent);
+                                    overridePendingTransition(0, 0);
+                                } catch (JSONException j) {
+                                    System.out.println("JSON Error");
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode_j, cz.msebera.android.httpclient.Header[] headers_j, byte[] errorResponse_j, Throwable e_j) {
+                                Log.e("ManagePage", "There was a problem in retrieving the url : " + e_j.toString());
+                            }
+                        });
                     }
                 });
+
+                TextView ll =(TextView) findViewById(R.id.loading);
+                ll.setVisibility(View.GONE);
 
             }
 
@@ -138,14 +189,17 @@ public class search extends ActionBarActivity {
                 Intent intent = new Intent(search.this, search.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("account", accountName);
-                searchthistime=ET.getText().toString();
-                bundle.putString("Searchname",searchthistime);
+                searchthistime = ET.getText().toString();
+                bundle.putString("Searchname", searchthistime);
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                overridePendingTransition(0, 0);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
             }
         });
+
     }
 
 

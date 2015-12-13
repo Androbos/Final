@@ -35,4 +35,6 @@
     <string name="title_activity_relative">relative</string>
     <string name="title_activity_setting">Setting</string>
     <string name="title_activity_mycommontask">mycommontask</string>
+    <string name="title_activity_edit_common_task">EditCommonTask</string>
+    <string name="title_activity_newmsg">newmsg</string>
 </resources>

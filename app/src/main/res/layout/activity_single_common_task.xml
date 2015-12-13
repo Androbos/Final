@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,12 +8,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/themecolor"
-    android:orientation="vertical"
+    android:id="@+id/wholescreen"
     tools:context="com.example.administrator.task.SingleCommonTask">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/loading"
+        android:clickable="true"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:layout_marginBottom="3dip"
+        android:textSize="30sp"
+        android:textColor="@color/orange"
+        android:text="Loading..." />
+
     <LinearLayout
+        android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -59,10 +72,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:context=".MainActivity">
+        android:layout_below="@id/linear1"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,39 +98,91 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear3"
+        android:layout_below="@id/linear2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/collapseDes"
+            android:tag="notshow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:clickable="true"
+            android:src="@drawable/ic_add_white_18dp"
+            />
 
         <TextView
-            android:id="@+id/collapseDes"
-            android:tag="show"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="20dp"
             android:textColor="@color/white"
             android:textSize="23sp"
-            android:text="— Description:" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ctaskdescript"
-            android:layout_marginBottom="20dip"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="description" />
+            android:text="Description:" />
 
     </LinearLayout>
 
+    <TextView
+        android:layout_below="@id/linear3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ctaskdescript"
+        android:visibility="gone"
+        android:layout_marginBottom="20dip"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="description" />
+
 
     <LinearLayout
+        android:id="@+id/linear4"
+        android:layout_below="@id/ctaskdescript"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/collapseMember"
+            android:tag="show"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:clickable="true"
+            android:src="@drawable/ic_apps_white_18dp"
+            />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            android:text="Members" />
+
+    </LinearLayout>
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/gridview"
+        android:layout_below="@id/linear4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="150dp"
+        android:numColumns="8"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"/>
+
+
+    <LinearLayout
+        android:id="@+id/linear5"
+        android:layout_below="@id/gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dip"
-        tools:context=".MainActivity">
+        android:layout_marginTop="15dip">
 
 
 
@@ -159,6 +225,8 @@
 
 
     <LinearLayout
+        android:id="@+id/linear6"
+        android:layout_below="@id/linear5"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:orientation="horizontal"
@@ -166,6 +234,7 @@
         tools:context=".MainActivity"/>
 
     <LinearLayout
+        android:layout_below="@id/linear6"
         android:id="@+id/comment_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -174,10 +243,17 @@
         tools:context=".MainActivity"/>
 
     <ExpandableListView
+        android:layout_below="@id/comment_dialog"
         android:id="@+id/comments"
         android:layout_width="match_parent"
         android:visibility="gone"
         android:groupIndicator="@null"
-        android:layout_height="wrap_content"></ExpandableListView>
+        android:layout_height="wrap_content"/>
 
-</LinearLayout>
+
+    <com.nhaarman.supertooltips.ToolTipRelativeLayout
+        android:id="@+id/tooltip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

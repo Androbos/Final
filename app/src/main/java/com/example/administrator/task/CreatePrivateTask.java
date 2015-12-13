@@ -1,14 +1,18 @@
 
 package com.example.administrator.task;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -53,18 +57,42 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
     Calendar c;
     //    String PTaskCreateTime;
 //    Integer PTaskFinished;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_private_task);
+
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreatePrivateTask.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
 
 
         Intent intent = getIntent();
         accountName = intent.getStringExtra("account");
         String des = intent.getStringExtra("des");
         String name = intent.getStringExtra("name");
-        TextView User = (TextView)findViewById(R.id.createPdebug);
-        User.setText(accountName);
+//        TextView User = (TextView)findViewById(R.id.createPdebug);
+//        User.setText(accountName);
 
 
         Button mCreate = (Button)findViewById(R.id.createP);
@@ -162,6 +190,25 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
                 Log.w("async", "success!!!!");
                 Toast.makeText(context, "Upload Successful", Toast.LENGTH_SHORT).show();
+
+                try {
+                    Thread.sleep(100);                 //1000 milliseconds is one second.
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                Intent intent= new Intent(CreatePrivateTask.this, ManageActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                CreatePrivateTask.this.finish();
+
+
+
             }
 
             @Override
@@ -170,21 +217,22 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
             }
         });
 
-        try {
-            Thread.sleep(100);                 //1000 milliseconds is one second.
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
-
-        Intent intent= new Intent(this, ManageActivity.class);
-        Bundle bundle=new Bundle();
-        bundle.putString("account", accountName);
-        intent.putExtras(bundle);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_left_out);
+//        try {
+//            Thread.sleep(100);                 //1000 milliseconds is one second.
+//        } catch(InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
+//
+//
+//        Intent intent= new Intent(this, ManageActivity.class);
+//        Bundle bundle=new Bundle();
+//        bundle.putString("account", accountName);
+//        intent.putExtras(bundle);
+////        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        startActivity(intent);
+//        overridePendingTransition(R.anim.push_right_in,
+//                R.anim.push_left_out);
+//        this.finish();
     }
     //BACK
     @Override

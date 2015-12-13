@@ -40,6 +40,7 @@
             android:label="@string/app_name" />
         <activity
             android:name=".CreatePrivateTask"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name"
             android:noHistory="true" />
         <activity
@@ -50,22 +51,26 @@
             android:label="@string/app_name" />
         <activity
             android:name=".CreateCommonTask"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name"
             android:noHistory="true" />
         <activity
             android:name=".SingleCommonTask"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name" />
         <activity
             android:name=".AllCommon"
             android:label="TASK" />
         <activity
             android:name=".EditPrivateTask"
+            android:windowSoftInputMode="adjustPan"
             android:label="TASK" />
         <activity
             android:name=".qrscan"
             android:label="TASK" />
         <activity
             android:name=".search"
+            android:windowSoftInputMode="adjustPan"
             android:label="TASK" />
         <activity
             android:name=".Suggestion"
@@ -81,9 +86,16 @@
 
         <activity
             android:name=".Setting"
-            android:label="@string/title_activity_setting" />
+            android:label="TASK" />
         <activity
             android:name=".mycommontask"
+            android:label="TASK" />
+        <activity
+            android:name=".EditCommonTask"
+            android:windowSoftInputMode="adjustPan"
+            android:label="TASK" />
+        <activity
+            android:name=".newmsg"
             android:label="TASK"></activity>
     </application>
 

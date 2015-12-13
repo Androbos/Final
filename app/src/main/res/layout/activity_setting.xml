@@ -8,13 +8,25 @@
     android:padding="5dp">
 
     <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/loading"
+        android:clickable="true"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="3dip"
+        android:textSize="30sp"
+        android:textColor="@color/orange"
+        android:text="Loading..." />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dip"
-        android:textSize="30sp"
+        android:textSize="40sp"
+        android:layout_gravity="center"
         android:gravity="top"
         android:textColor="@color/yellow_grey"
-        android:text="All My Private Task" />
+        android:text="Setting" />
 
     <Switch
         android:id="@+id/mySwitch"
@@ -23,12 +35,50 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:track="@drawable/track"
         android:layout_marginTop="20dp"
         android:text="Email Notification" />
+
+    <Switch
+        android:id="@+id/gender_visible"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:track="@drawable/track"
+        android:layout_marginTop="20dp"
+        android:text="Gender Visibility" />
+
+    <Switch
+        android:id="@+id/email_visible"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:track="@drawable/track"
+        android:layout_marginTop="20dp"
+        android:text="Email Visibility" />
+
+    <Switch
+        android:id="@+id/dob_visible"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:track="@drawable/track"
+        android:layout_marginTop="20dp"
+        android:text="Birthday Visibility" />
 
     <Button
         android:text="Update"
         android:id="@+id/Update"
+        android:layout_marginTop="30sp"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
