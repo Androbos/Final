@@ -46,14 +46,4 @@
         android:scrollbars="none" />
 
 
-    <TextView
-        android:id="@+id/allpdebug"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dip"
-        android:paddingTop="40sp"
-        android:textSize="30sp"
-        android:gravity="bottom"
-        android:text="User" />
-
 </LinearLayout>

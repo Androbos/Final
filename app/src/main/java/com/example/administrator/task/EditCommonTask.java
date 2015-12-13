@@ -1,9 +1,11 @@
 package com.example.administrator.task;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -188,42 +190,75 @@ public class EditCommonTask extends ActionBarActivity implements View.OnClickLis
             checked=1;
         }
 
-        RequestParams params = new RequestParams();
-        params.put("checked", checked);
-        params.put("taskid", CTaskID);
-        params.put("taskname", CTaskName);
-        params.put("description", CTaskDescription);
-        params.put("due", CTaskDue);
-        AsyncHttpClient client = new AsyncHttpClient();
+        if(CTaskName.equals("")||CTaskDue.equals("")){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set title
+            alertDialogBuilder.setTitle("Your Title");
+            // set dialog message
+            alertDialogBuilder
+                    .setTitle("Error")
+                    .setMessage("Task name or due missing!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Intent intent = new Intent(EditCommonTask.this, EditCommonTask.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("account", accountName);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
+                            EditCommonTask.this.finish();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
-        client.post("http://task-1123.appspot.com/updatecommontask", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
-                Log.w("async", "success!!!!");
-                Toast.makeText(context, "Create Successful", Toast.LENGTH_SHORT).show();
-                try {
-                    Thread.sleep(100);                 //1000 milliseconds is one second.
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+            // show it
+            alertDialog.show();
+        }else {
+
+            RequestParams params = new RequestParams();
+            params.put("checked", checked);
+            params.put("taskid", CTaskID);
+            params.put("taskname", CTaskName);
+            params.put("description", CTaskDescription);
+            params.put("due", CTaskDue);
+            AsyncHttpClient client = new AsyncHttpClient();
+
+            client.post("http://task-1123.appspot.com/updatecommontask", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
+                    Log.w("async", "success!!!!");
+                    Toast.makeText(context, "Create Successful", Toast.LENGTH_SHORT).show();
+                    try {
+                        Thread.sleep(100);                 //1000 milliseconds is one second.
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+
+                    Intent intent = new Intent(EditCommonTask.this, ManageActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("account", accountName);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    EditCommonTask.this.finish();
                 }
 
-
-                Intent intent = new Intent(EditCommonTask.this, ManageActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("account", accountName);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_right_in,
-                        R.anim.push_left_out);
-                EditCommonTask.this.finish();
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
-                Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
+                    Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
+                }
+            });
+        }
 
     }
     //BACK

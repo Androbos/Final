@@ -81,6 +81,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
     private PullToRefreshLayout mPullToRefreshLayout;
     ListView listView ;
+    LinearLayout reminderoutline;
     TextView reminder;
     String email;
 
@@ -144,8 +145,6 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
             startService(service);
             // time service
 
-            TextView mDebug = (TextView) findViewById(R.id.managedebug);
-            mDebug.setText(accountName);
 //            Button mSignout = (Button) findViewById(R.id.manage_sign_out);
 //            Button mCreate = (Button) findViewById(R.id.CreateTask);
             ImageView mMore = (ImageView) findViewById(R.id.Pmore);
@@ -432,13 +431,15 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                     }
 
                     // remindpart
-                    reminder=(TextView)findViewById(R.id.replyremind);
+                    reminder=(TextView)findViewById(R.id.replyremindtext);
+                    reminderoutline=(LinearLayout)findViewById(R.id.replyremind);
 
 
                     if (sender.size()!=0){
                         reminder.setVisibility(View.VISIBLE);
                         reminder.setText("New Messages");
-                        BadgeView badge = new BadgeView(ManageActivity.this, reminder);
+
+                        BadgeView badge = new BadgeView(ManageActivity.this, reminderoutline);
                         badge.setText(String.valueOf(sender.size()));
                         badge.show();
                         reminder.setOnClickListener(new OnClickListener() {

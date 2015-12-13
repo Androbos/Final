@@ -2,9 +2,11 @@
 package com.example.administrator.task;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -175,47 +177,79 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
         mm = m.getText().toString();
         PTaskID = (PTaskName+accountName).hashCode();
 
-        RequestParams params = new RequestParams();
-        params.put("taskname", PTaskName);
-        params.put("creator", accountName);
-        params.put("description", PTaskDiscription);
-        params.put("due", PTaskDue);
-        params.put("taskid", PTaskID);
-        params.put("d", dd);
-        params.put("h", hh);
-        params.put("m", mm);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://task-1123.appspot.com/createprivatetask", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
-                Log.w("async", "success!!!!");
-                Toast.makeText(context, "Upload Successful", Toast.LENGTH_SHORT).show();
+        if(PTaskName.equals("")||PTaskDue.equals("")){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set title
+            alertDialogBuilder.setTitle("Your Title");
+            // set dialog message
+            alertDialogBuilder
+                    .setTitle("Error")
+                    .setMessage("Task name or due missing!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Intent intent = new Intent(CreatePrivateTask.this, CreatePrivateTask.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("account", accountName);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
+                            CreatePrivateTask.this.finish();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
-                try {
-                    Thread.sleep(100);                 //1000 milliseconds is one second.
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+            // show it
+            alertDialog.show();
+        }else {
+
+            RequestParams params = new RequestParams();
+            params.put("taskname", PTaskName);
+            params.put("creator", accountName);
+            params.put("description", PTaskDiscription);
+            params.put("due", PTaskDue);
+            params.put("taskid", PTaskID);
+            params.put("d", dd);
+            params.put("h", hh);
+            params.put("m", mm);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post("http://task-1123.appspot.com/createprivatetask", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
+                    Log.w("async", "success!!!!");
+                    Toast.makeText(context, "Upload Successful", Toast.LENGTH_SHORT).show();
+
+                    try {
+                        Thread.sleep(100);                 //1000 milliseconds is one second.
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    Intent intent = new Intent(CreatePrivateTask.this, ManageActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("account", accountName);
+                    intent.putExtras(bundle);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    CreatePrivateTask.this.finish();
+
+
                 }
 
-                Intent intent= new Intent(CreatePrivateTask.this, ManageActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("account", accountName);
-                intent.putExtras(bundle);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_right_in,
-                        R.anim.push_left_out);
-                CreatePrivateTask.this.finish();
-
-
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
-                Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
+                    Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
+                }
+            });
+        }
 
 //        try {
 //            Thread.sleep(100);                 //1000 milliseconds is one second.

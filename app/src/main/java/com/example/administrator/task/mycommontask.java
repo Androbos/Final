@@ -87,10 +87,6 @@ public class mycommontask extends ActionBarActivity implements AdapterView.OnIte
         });
 
 
-
-        TextView User = (TextView)findViewById(R.id.allpdebug);
-        User.setText(accountName);
-
         final String request_url = "http://task-1123.appspot.com/viewmytask?userid="+accountName;
         AsyncHttpClient httpClient = new AsyncHttpClient();
         httpClient.get(request_url, new AsyncHttpResponseHandler() {
@@ -107,7 +103,7 @@ public class mycommontask extends ActionBarActivity implements AdapterView.OnIte
                     PrivateTask = jObject.getJSONArray("taskname");
                     PrivateTaskID = jObject.getJSONArray("taskid");
                     PrivateTaskdue = jObject.getJSONArray("due");
-                    Jsubtaskid=jObject.getJSONArray("jointask_id");
+                    Jsubtaskid=jObject.getJSONArray("jointaskid");
 
                     for (int j = 0; j < Jsubtaskid.length(); j++) {
                         subtaskid.add(Jsubtaskid.getInt(j));

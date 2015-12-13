@@ -9,6 +9,7 @@
     android:id="@+id/response_scroll"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:paddingTop="10dp"
     android:scrollbars="vertical"
     android:background="@color/themecolor"
     >
@@ -20,16 +21,22 @@
         android:gravity="center"
         tools:context=".ManageActivity">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/replyremind"
+            android:paddingTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:paddingTop="20sp"
-            android:textSize="20sp"
-            android:visibility="gone"
-            android:background="@drawable/round"
-            android:text="" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/replyremindtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:visibility="gone"
+                android:background="@drawable/round"
+                android:text="" />
+
+        </LinearLayout>
 
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:paddingTop="20dp"
@@ -109,15 +116,6 @@
             </TableRow>
         </TableLayout>
 
-
-        <TextView
-            android:id="@+id/managedebug"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:paddingTop="40sp"
-            android:textSize="30sp"
-            android:text="User" />
 
     </LinearLayout>
     <!--</com.example.administrator.task.RefreshableView>-->

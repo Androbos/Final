@@ -1,9 +1,11 @@
 package com.example.administrator.task;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -207,37 +209,70 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
         mm = m.getText().toString();
 //        PTaskID = (PTaskName+accountName).hashCode();
 
-        RequestParams params = new RequestParams();
-        params.put("taskname", PTaskName);
+        if(PTaskName.equals("")||PTaskDue.equals("")){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set title
+            alertDialogBuilder.setTitle("Your Title");
+            // set dialog message
+            alertDialogBuilder
+                    .setTitle("Error")
+                    .setMessage("Task name or due missing!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Intent intent = new Intent(EditPrivateTask.this, EditPrivateTask.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("account", accountName);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
+                            EditPrivateTask.this.finish();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+        }else {
+
+            RequestParams params = new RequestParams();
+            params.put("taskname", PTaskName);
 //        params.put("creator", accountName);
-        params.put("description", PTaskDiscription);
-        params.put("due", PTaskDue);
-        params.put("taskid", PTaskID);
-        params.put("d", dd);
-        params.put("h", hh);
-        params.put("m", mm);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://task-1123.appspot.com/updateprivatetask", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
-                Toast.makeText(context, "Update Successful", Toast.LENGTH_SHORT).show();
+            params.put("description", PTaskDiscription);
+            params.put("due", PTaskDue);
+            params.put("taskid", PTaskID);
+            params.put("d", dd);
+            params.put("h", hh);
+            params.put("m", mm);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post("http://task-1123.appspot.com/updateprivatetask", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
+                    Toast.makeText(context, "Update Successful", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(EditPrivateTask.this, SinglePrivateTask.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("PTaskID", PTaskID);
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_right_in,
-                        R.anim.push_left_out);
-                EditPrivateTask.this.finish();
-            }
+                    Intent intent = new Intent(EditPrivateTask.this, SinglePrivateTask.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("PTaskID", PTaskID);
+                    intent.putExtras(bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    EditPrivateTask.this.finish();
+                }
 
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
-                Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
+                    Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
+                }
+            });
+        }
 
 
     }

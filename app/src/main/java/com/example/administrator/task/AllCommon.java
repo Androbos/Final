@@ -102,9 +102,6 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
             }
         });
 
-        TextView User = (TextView)findViewById(R.id.allpdebug);
-        User.setText(accountName);
-
         final String request_url = "http://task-1123.appspot.com/viewmytask?userid="+accountName;
         AsyncHttpClient httpClient = new AsyncHttpClient();
         httpClient.get(request_url, new AsyncHttpResponseHandler() {
@@ -127,7 +124,7 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
                     PrivateTaskfinished=jObject.getJSONArray("remindfinish");
                     PrivateTaskoverdue=jObject.getJSONArray("remindoverdue");
                     PrivateTaskdue=jObject.getJSONArray("remindjoindue");
-                    Jsubtaskid=jObject.getJSONArray("jointask_id");
+                    Jsubtaskid=jObject.getJSONArray("jointaskid");
 
                     for (int j = 0; j < Jsubtaskid.length(); j++) {
                         subtaskid.add(Jsubtaskid.getInt(j));
@@ -198,6 +195,7 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
 
                 } catch (JSONException j) {
                     System.out.println("JSON Error");
+                    j.printStackTrace();
                 }
 
             }
@@ -322,7 +320,7 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
             if(!mListView.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
                 Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, com.example.administrator.task.SinglePrivateTask.class);
+                Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
                 bundle.putInt("PTaskID", PTaskID1.get(P));
@@ -342,7 +340,7 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
             if(!mListViewfinish.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
                 Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, com.example.administrator.task.SinglePrivateTask.class);
+                Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
                 bundle.putInt("PTaskID", PTaskID2.get(P));
@@ -363,7 +361,7 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
             if(!mListViewoverdue.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
                 Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, com.example.administrator.task.SinglePrivateTask.class);
+                Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
                 bundle.putInt("PTaskID", PTaskID3.get(P));

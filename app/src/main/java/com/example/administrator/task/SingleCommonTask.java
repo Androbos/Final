@@ -3,6 +3,7 @@ package com.example.administrator.task;
 import com.example.administrator.task.myComment;
 //import com.example.administrator.task.CommentAdapter;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -96,6 +100,12 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
     Context context = this;
     Activity activity = this;
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +119,23 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
         email = intent.getStringExtra("email");
 
         //==========hide
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
+        int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SingleCommonTask.this, ManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account", accountName);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                finish();
+            }
+        });
 
         final LinearLayout l1 = (LinearLayout) findViewById(R.id.linear1);
         final LinearLayout l2 = (LinearLayout) findViewById(R.id.linear2);
@@ -311,6 +338,21 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                             // When clicked, show a toast with the TextView text
                             Toast.makeText(getApplicationContext(),
                                     ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    ManageCommonTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent= new Intent(SingleCommonTask.this, EditCommonTask.class);
+                            Bundle bundle=new Bundle();
+                            bundle.putString("account", accountName);
+                            bundle.putInt("taskid", TaskId);
+                            intent.putExtras(bundle);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
                         }
                     });
 

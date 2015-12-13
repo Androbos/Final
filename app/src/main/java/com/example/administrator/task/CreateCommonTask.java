@@ -1,9 +1,11 @@
 package com.example.administrator.task;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -135,34 +137,67 @@ public class CreateCommonTask extends ActionBarActivity implements View.OnClickL
         CTaskDescription = TaskDescription.getText().toString();
         CTaskID = (CTaskName+accountName).hashCode();
 
-        RequestParams params = new RequestParams();
-        params.put("taskname", CTaskName);
-        params.put("creator", accountName);
-        params.put("description", CTaskDescription);
-        params.put("due", CTaskDue);
-        params.put("taskid", CTaskID);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://task-1123.appspot.com/createcommontask", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
-                Log.w("async", "success!!!!");
-                Toast.makeText(context, "Create Successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CreateCommonTask.this, ManageActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("account", accountName);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_right_in,
-                        R.anim.push_left_out);
-                CreateCommonTask.this.finish();
-            }
+        if(CTaskName.equals("")||CTaskDue.equals("")){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set title
+            alertDialogBuilder.setTitle("Your Title");
+            // set dialog message
+            alertDialogBuilder
+                    .setTitle("Error")
+                    .setMessage("Task name or due missing!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Intent intent = new Intent(CreateCommonTask.this, CreateCommonTask.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("account", accountName);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.push_right_in,
+                                    R.anim.push_left_out);
+                            CreateCommonTask.this.finish();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
-                Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
-            }
-        });
+            // show it
+            alertDialog.show();
+        }else {
+
+            RequestParams params = new RequestParams();
+            params.put("taskname", CTaskName);
+            params.put("creator", accountName);
+            params.put("description", CTaskDescription);
+            params.put("due", CTaskDue);
+            params.put("taskid", CTaskID);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post("http://task-1123.appspot.com/createcommontask", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
+                    Log.w("async", "success!!!!");
+                    Toast.makeText(context, "Create Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CreateCommonTask.this, ManageActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("account", accountName);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_right_in,
+                            R.anim.push_left_out);
+                    CreateCommonTask.this.finish();
+                }
+
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] errorResponse, Throwable e) {
+                    Log.e("Posting_to_blob", "There was a problem in retrieving the url : " + e.toString());
+                }
+            });
+        }
 
 
 
