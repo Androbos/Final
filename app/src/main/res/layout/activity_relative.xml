@@ -13,9 +13,10 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        android:text="LOADING..." />
 
     <TextView
         android:layout_width="match_parent"

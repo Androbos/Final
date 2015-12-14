@@ -19,38 +19,59 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        android:text="LOADING..." />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/r1"
-        tools:context=".MainActivity">
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:id="@+id/ptaskname"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_weight="6"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:layout_alignParentLeft="true"
-            android:textSize="40sp"
-            android:textColor="@color/orange"
-            android:text="Task Name" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/ptaskname"
+                android:layout_height="0px"
+                android:layout_weight="4"
+                android:layout_marginBottom="3dip"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/orange"
+                android:text="Task Name" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:id="@+id/ptaskcreatetime"
+                android:textColor="@color/white"
+                android:textStyle="italic"
+                android:textSize="15sp"
+                android:text="create time" />
+
+        </LinearLayout>
 
         <ImageView
+            android:layout_width="0px"
             android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_weight="3"
-            android:layout_alignParentRight="true"
-            android:background="@color/blue"
+            android:layout_weight="1"
+            android:tag="notjoin"
+            android:background="@color/themecolor"
+            android:layout_centerInParent="true"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@drawable/ic_edit_white_18dp"
             />
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,18 +84,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
-            android:paddingRight="20dp"
-            android:textColor="@color/white"
-            android:textSize="30sp"
+            android:paddingRight="10dp"
+            android:textColor="@color/due"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:text="Deadline:" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ptaskdue"
-            android:layout_marginBottom="20dip"
-            android:textColor="@color/white"
-            android:textSize="30sp"
+            android:layout_marginBottom="5dip"
+            android:textColor="@color/due"
+            android:textStyle="bold"
+            android:textSize="20sp"
             android:text="due" />
 
     </LinearLayout>
@@ -92,44 +115,19 @@
             android:layout_marginBottom="20dip"
             android:paddingRight="20dp"
             android:textColor="@color/white"
-            android:textSize="30sp"
+
+            android:textSize="23sp"
             android:text="Description:" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ptaskdescript"
             android:layout_marginBottom="20dip"
+            android:background="@color/discript"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:text="description" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/l3"
-        android:orientation="horizontal"
-        tools:context=".MainActivity">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:paddingRight="20dp"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:text="Create time:" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ptaskcreatetime"
-            android:layout_marginBottom="20dip"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:text="create time" />
 
     </LinearLayout>
 

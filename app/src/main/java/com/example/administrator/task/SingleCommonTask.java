@@ -11,6 +11,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -51,6 +52,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -64,6 +70,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -79,6 +86,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
     int ReplySubmitId = 0;
     int ReplyTextId = 0;
     int TaskId = 0;
+    int groupposition;
     String Days;
     String Hours;
     String ReplyTo;
@@ -117,6 +125,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
         accountName = intent.getStringExtra("account");
         hasJoined = intent.getBooleanExtra("hasJoined", false);
         email = intent.getStringExtra("email");
+        groupposition = intent.getIntExtra("groupposition", -1);
 
         //==========hide
         ActionBar bar = getActionBar();
@@ -183,7 +192,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                 try {
 
                     JSONObject jObject = new JSONObject(new String(response));
-                    String CTaskname;
+                    final String CTaskname;
                     String CTaskdue;
                     String CTaskdescription;
                     String CTaskcreatetime;
@@ -253,19 +262,11 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
 
                                 } catch (JSONException j) {
                                     System.out.println("JSON Error");
+                                    j.printStackTrace();
                                 }
 
-                                //hide show---------------
-                                TextView load = (TextView) findViewById(R.id.loading);
-                                load.setVisibility(View.GONE);
-                                l1.setVisibility(View.VISIBLE);
-                                l2.setVisibility(View.VISIBLE);
-                                l3.setVisibility(View.VISIBLE);
-                                l4.setVisibility(View.VISIBLE);
-                                l5.setVisibility(View.VISIBLE);
-                                l6.setVisibility(View.VISIBLE);
-                                CD.setVisibility(View.VISIBLE);
-                                gv.setVisibility(View.VISIBLE);
+                                //hide show-------------
+
 
                             }
 
@@ -277,7 +278,34 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
 
                         mComments.add(oneComment);
                         CCCC.add(Content);
+
+                            TextView load = (TextView) findViewById(R.id.loading);
+                            load.setVisibility(View.GONE);
+                            l1.setVisibility(View.VISIBLE);
+                            l2.setVisibility(View.VISIBLE);
+                            l3.setVisibility(View.VISIBLE);
+                            l4.setVisibility(View.VISIBLE);
+                            l5.setVisibility(View.VISIBLE);
+                            l6.setVisibility(View.VISIBLE);
+                            CD.setVisibility(View.VISIBLE);
+                            gv.setVisibility(View.VISIBLE);
+
                     }
+
+                    if(JComments.length()==0){
+                        TextView load = (TextView) findViewById(R.id.loading);
+                        load.setVisibility(View.GONE);
+                        l1.setVisibility(View.VISIBLE);
+                        l2.setVisibility(View.VISIBLE);
+                        l3.setVisibility(View.VISIBLE);
+                        l4.setVisibility(View.VISIBLE);
+                        l5.setVisibility(View.VISIBLE);
+                        l6.setVisibility(View.VISIBLE);
+                        CD.setVisibility(View.VISIBLE);
+                        gv.setVisibility(View.VISIBLE);
+                    }
+
+
                     System.out.println(mComments.size());
                     TextView commentnumber = (TextView) findViewById(R.id.comment_nums);
                     commentnumber.setText("(" + mComments.size() + ")");
@@ -305,12 +333,19 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                     Ccreator = jObject.getJSONArray("creator").getString(0);
                     ImageView showcomment  = (ImageView) findViewById(R.id.show_comments);
                     ImageView ManageCommonTask = (ImageView) findViewById(R.id.manage_common);
+                    if(groupposition>=0){
+                        showcomment.setImageResource(R.drawable.ic_indeterminate_check_box_white_24dp);
+                        showcomment.setTag("minus");
+                        CommentList.setVisibility(View.VISIBLE);
+                        CommentList.expandGroup(groupposition,true);
+                    }
+
                     if (Ccreator.equals(accountName)) {
                         ManageCommonTask.setImageResource(R.drawable.ic_edit_white_18dp);
                         ManageCommonTask.setTag("edit");
                     } else if (hasJoined) {
                         ManageCommonTask.setImageResource(R.drawable.ic_star_white_18dp);
-                        showcomment.setTag("plus");
+                        showcomment.setTag("minus");
                         Toast.makeText(context, "Click + to see comments", Toast.LENGTH_SHORT).show();
                         ManageCommonTask.setTag("hasJoined");
                     } else {
@@ -332,6 +367,53 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                     ctaskdescription.setText(CTaskdescription);
                     ctaskcreatetime.setText("Created by " + Ccreator + " at " + CTaskcreatetime);
 
+                    ctaskname.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String url = String.valueOf(TaskId);
+                            int QR_WIDTH = 500;
+                            int QR_HEIGHT = 500;
+                            try {
+                                if (url == null || "".equals(url) || url.length() < 1) {
+                                    return;
+                                }
+                                Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
+                                hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+                                BitMatrix bitMatrix = new QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
+                                int[] pixels = new int[QR_WIDTH * QR_HEIGHT];
+                                for (int y = 0; y < QR_HEIGHT; y++) {
+                                    for (int x = 0; x < QR_WIDTH; x++) {
+                                        if (bitMatrix.get(x, y)) {
+                                            pixels[y * QR_WIDTH + x] = 0xff000000;
+                                        } else {
+                                            pixels[y * QR_WIDTH + x] = 0xffffffff;
+                                        }
+                                    }
+                                }
+
+                                Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
+                                bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
+                                ImageView image = new ImageView(SingleCommonTask.this);
+                                image.setImageBitmap(bitmap);
+                                AlertDialog.Builder builder =
+                                        new AlertDialog.Builder(SingleCommonTask.this).
+                                                setTitle("QR Code").
+                                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).
+                                                setView(image);
+                                builder.create().show();
+
+                            } catch (WriterException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
                     CommentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View view,
                                                 int position, long id) {
@@ -341,20 +423,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                         }
                     });
 
-                    ManageCommonTask.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent= new Intent(SingleCommonTask.this, EditCommonTask.class);
-                            Bundle bundle=new Bundle();
-                            bundle.putString("account", accountName);
-                            bundle.putInt("taskid", TaskId);
-                            intent.putExtras(bundle);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.push_right_in,
-                                    R.anim.push_left_out);
-                        }
-                    });
+
 
 
                     CommentList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -377,7 +446,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                                 ReplySubmit.setId(View.generateViewId());
                                 ReplySubmitId = ReplySubmit.getId();
                                 ReplyTo = ReplyCreator.getText().toString();
-                                ReplyEdit.setHint("@"+ReplyTo);
+                                ReplyEdit.setHint("@" + ReplyTo);
                                 ReplySubmit.setBackgroundResource(R.drawable.mybutton);
                                 ReplySubmit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                                 ReplySubmit.setPadding(0, 0, 0, 0);
@@ -424,6 +493,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                             ToolTip toolTip = new ToolTip()
                                     .withText(MemberName.get(position) + "\nEmail: " + MemberEmail.get(position) + "\nGender: " + MemberGender.get(position) + "\nDOB: " + MemberDob.get(position) + s)
                                     .withTextColor(Color.WHITE)
+
                                     .withColor(getResources().getColor(R.color.blue))
                                     .withShadow();
 
@@ -438,6 +508,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                                 final int estimatedToastHeight = (int) (170
                                         * v.getContext().getResources().getDisplayMetrics().density);
                                 myToolTipView.setY(screenPos[1] - displayFrame.top - estimatedToastHeight);
+
                             } else {
                                 myToolTipView.remove();
                                 myToolTipView = null;
@@ -450,6 +521,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
 
                 } catch (JSONException j) {
                     System.out.println("JSON Error");
+                    j.printStackTrace();
                 }
 
             }
@@ -459,6 +531,9 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                 Log.e("ManagePage", "There was a problem in retrieving the url : " + e.toString());
             }
         });
+
+
+
 
 
 
@@ -518,7 +593,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                 @Override
                 public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] response) {
                     Log.w("async", "success!!!!");
-                   Intent intent =new Intent(SingleCommonTask.this, SingleCommonTask.class);
+                    Intent intent =new Intent(SingleCommonTask.this, SingleCommonTask.class);
                     Bundle bundle =new Bundle();
                     bundle.putString("account", accountName);
                     bundle.putInt("CTaskID", TaskId);
@@ -526,6 +601,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                     bundle.putBoolean("hasJoined", hasJoined);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    SingleCommonTask.this.finish();
                     Toast.makeText(context, "Submit Successful", Toast.LENGTH_SHORT).show();
                 }
 
@@ -579,7 +655,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
             String ReplyContent = ReplyText.getText().toString();
             String replyto;
             ListView CommentList = (ListView) findViewById(R.id.comments);
-            int position = CommentList.getPositionForView(v);
+            final int position = CommentList.getPositionForView(v);
             myComment iComment = mComments.get(position);
             if(!toReplys){
                 replyto = iComment.Creator;
@@ -594,6 +670,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
             params.put("creator", accountName);
             params.put("content", ReplyContent);
             params.put("replyto",replyto);
+            params.put("groupposition",position);
 
             AsyncHttpClient client = new AsyncHttpClient();
             client.post("http://task-1123.appspot.com/createreply", params, new AsyncHttpResponseHandler() {
@@ -606,8 +683,10 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                     bundle.putInt("CTaskID", TaskId);
                     bundle.putString("email", email);
                     bundle.putBoolean("hasJoined", hasJoined);
+                    bundle.putInt("groupposition", position);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    SingleCommonTask.this.finish();
                     Toast.makeText(context, "Submit Successful", Toast.LENGTH_SHORT).show();
                 }
 
@@ -623,7 +702,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                 ShowComments.setImageResource(R.drawable.ic_add_box_white_18dp);
                 ShowComments.setTag("plus");
                 CommentList.setVisibility(View.GONE);
-            }else{
+            }else if(ShowComments.getTag().equals("plus")){
                 ShowComments.setImageResource(R.drawable.ic_indeterminate_check_box_white_24dp);
                 ShowComments.setTag("minus");
                 CommentList.setVisibility(View.VISIBLE);
@@ -643,6 +722,18 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
         }else if(v.getId() == R.id.manage_common){
 
             if(v.getTag().equals("edit")){
+
+                Intent intent= new Intent(SingleCommonTask.this, EditCommonTask.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("account", accountName);
+                bundle.putInt("taskid", TaskId);
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in,
+                        R.anim.push_left_out);
+                SingleCommonTask.this.finish();
+
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
             }else if(v.getTag().equals("hasJoined")){
                 RequestParams params = new RequestParams();
@@ -670,6 +761,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                         bundle.putBoolean("hasJoined", hasJoined);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                        SingleCommonTask.this.finish();
                     }
 
                     @Override
@@ -734,17 +826,18 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
                 ManageCommonTask.setImageResource(R.drawable.ic_star_white_18dp);
                 ManageCommonTask.setTag("hasJoined");
                 ImageView showcomment  = (ImageView) findViewById(R.id.show_comments);
-                showcomment.setTag("plus");
+                showcomment.setTag("minus");
                 Intent intent =new Intent(SingleCommonTask.this, SingleCommonTask.class);
                 Bundle bundle =new Bundle();
                 hasJoined = true;
                 bundle.putString("account", accountName);
                 bundle.putInt("CTaskID", TaskId);
                 bundle.putString("email", email);
-                bundle.putBoolean("hasJoined", hasJoined);
+                bundle.putBoolean("hasJoined", true);
 
                 intent.putExtras(bundle);
                 startActivity(intent);
+                SingleCommonTask.this.finish();
                 Toast.makeText(context, "join", Toast.LENGTH_SHORT).show();
             }
 
@@ -793,7 +886,7 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
             if (convertView == null) {  // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
 
-                imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
+                imageView.setLayoutParams(new GridView.LayoutParams(130, 130));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             } else {
                 imageView = (ImageView) convertView;
@@ -870,4 +963,5 @@ public class SingleCommonTask extends FragmentActivity implements View.OnClickLi
 
 
 }
+
 

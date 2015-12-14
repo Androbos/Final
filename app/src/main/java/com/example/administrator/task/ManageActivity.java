@@ -58,6 +58,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.readystatesoftware.viewbadger.BadgeView;
+//import com.afollestad.materialdialogs.*;
+
 
 import org.apache.http.conn.params.ConnManagerPNames;
 import org.json.JSONArray;
@@ -93,6 +95,10 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
     ArrayList<String> sender = new ArrayList<String>();
     ArrayList<Integer> newmsgtaskid = new ArrayList<Integer>();
+    ArrayList<String> newmsgtaskname = new ArrayList<String>();
+    ArrayList<String> newmsgurl = new ArrayList<String>();
+    ArrayList<Integer> GroupPositions = new ArrayList<Integer>();
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -116,6 +122,15 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
         Intent intentstream = getIntent();
         accountName =intentstream.getStringExtra("account");
+
+        TextView load = (TextView) findViewById(R.id.loading);
+        TableLayout l1 =(TableLayout) findViewById(R.id.CommonTask);
+        TableLayout l2 =(TableLayout) findViewById(R.id.PrivateTask);
+
+        load.setVisibility(View.VISIBLE);
+        l1.setVisibility(View.GONE);
+        l2.setVisibility(View.GONE);
+
 
         int abTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
         findViewById(abTitleId).setOnClickListener(new View.OnClickListener() {
@@ -271,6 +286,12 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         overridePendingTransition(R.anim.push_right_in,
                                 R.anim.push_left_out);
                     }else if(position==4){
+//                        new MaterialDialog.Builder(ManageActivity.this)
+//                                .title(R.string.title)
+//                                .content(R.string.content)
+//                                .positiveText(R.string.agree)
+//                                .negativeText(R.string.disagree)
+//                                .show();
                         DialogFragment newFragment = new CreateTaskSelect();
                         newFragment.show(getSupportFragmentManager(), "CREATE");
                     }else if(position==7){
@@ -312,16 +333,32 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
 
                         JSONArray Sender = new JSONArray();
                         JSONArray newmsg = new JSONArray();
+                        JSONArray newmsgname = new JSONArray();
+                        JSONArray newmsgurls = new JSONArray();
+                        JSONArray GroupPosition = new JSONArray();
 
+                        if(!jObject.isNull("newmsgtaskurl")){
+                            newmsgurls = jObject.getJSONArray("newmsgtaskurl");
+                        }
+                        if(!jObject.isNull("groupposition")){
+                            GroupPosition=jObject.getJSONArray("groupposition");
+                        }
                         if(!jObject.isNull("newmsgtaskid")){
                             newmsg = jObject.getJSONArray("newmsgtaskid");
                         }
                         if(!jObject.isNull("sender")){
                             Sender =jObject.getJSONArray("sender");
                         }
+                        if(!jObject.isNull("newmsgtaskname")){
+                            newmsgname = jObject.getJSONArray("newmsgtaskname");
+                        }
                         for(int i = 0; i < Sender.length(); i++){
                             sender.add(Sender.getString(i));
                             newmsgtaskid.add(newmsg.getInt(i));
+                            newmsgtaskname.add(newmsgname.getString(i));
+                            newmsgurl.add(newmsgurls.getString(i));
+                            GroupPositions.add(GroupPosition.getInt(i));
+
                         }
 
                         System.out.println(jObject.isNull("jointaskname"));
@@ -358,6 +395,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                         }
                     } catch (JSONException j) {
                         System.out.println("JSON Error");
+                        j.printStackTrace();
                     }
 
                     for(int i = 0; i < CTask.size(); i++){
@@ -450,6 +488,9 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                                 bundle.putString("account", accountName);
                                 bundle.putStringArrayList("sender", sender);
                                 bundle.putIntegerArrayList("newmsgtaskid", newmsgtaskid);
+                                bundle.putStringArrayList("newmsgtaskname", newmsgtaskname);
+                                bundle.putStringArrayList("newmsgurl", newmsgurl);
+                                bundle.putIntegerArrayList("groupposition", GroupPositions);
                                 bundle.putString("email", email);
                                 intent.putExtras(bundle);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -470,6 +511,9 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
             });
 
             //update profile
+            load.setVisibility(View.GONE);
+            l1.setVisibility(View.VISIBLE);
+            l2.setVisibility(View.VISIBLE);
 
         }
         else{
@@ -653,6 +697,8 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                 Bundle bundle= new Bundle();
                 bundle.putString("account", accountName);
                 bundle.putInt("CTaskID", Integer.valueOf(scanContent));
+                bundle.putString("email",email);
+                bundle.putBoolean("hasJoined",true);
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
@@ -723,7 +769,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                             bundle.putString("account", accountName);
                             intent.putExtras(bundle);
                             startActivity(intent);
-                            self.finish();
+
                         }
                     })
                     .setNegativeButton(R.string.private_task, new DialogInterface.OnClickListener() {
@@ -733,7 +779,7 @@ public class ManageActivity extends ActionBarActivity implements ResultCallback<
                             bundle.putString("account", accountName);
                             intent.putExtras(bundle);
                             startActivity(intent);
-                            self.finish();
+
                         }
                     });
             // Create the AlertDialog object and return it

@@ -78,8 +78,6 @@ public class EditCommonTask extends ActionBarActivity implements View.OnClickLis
             }
         });
 
-        TextView User = (TextView)findViewById(R.id.createCdebug);
-        User.setText(accountName);
 
 
         Button mCreate = (Button)findViewById(R.id.createC);

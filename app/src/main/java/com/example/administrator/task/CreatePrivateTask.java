@@ -93,6 +93,8 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
         accountName = intent.getStringExtra("account");
         String des = intent.getStringExtra("des");
         String name = intent.getStringExtra("name");
+        String time=intent.getStringExtra("time");
+        String week =intent.getStringExtra("week");
 //        TextView User = (TextView)findViewById(R.id.createPdebug);
 //        User.setText(accountName);
 
@@ -105,7 +107,9 @@ public class CreatePrivateTask extends ActionBarActivity implements View.OnClick
         if(des!=null){
             EditText tname = (EditText) findViewById(R.id.taskname);
             EditText scrip = (EditText) findViewById(R.id.taskdiscrip);
-            tname.setText(name);
+            EditText etime = (EditText) findViewById(R.id.taskdue);
+            etime.setText(time);
+            tname.setText(name+" on "+week);
             scrip.setText(des);
         }
 

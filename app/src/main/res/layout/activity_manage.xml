@@ -21,6 +21,18 @@
         android:gravity="center"
         tools:context=".ManageActivity">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/loading"
+            android:clickable="true"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginBottom="3dip"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:textStyle="bold|italic"
+            android:text="LOADING..." />
+
         <LinearLayout
             android:id="@+id/replyremind"
             android:paddingTop="10dp"
@@ -46,7 +58,7 @@
 
             android:stretchColumns="1">
             <TableRow
-                android:background="@color/blue_grey_700">
+                android:background="@color/bar">
                 <TextView
                     android:text="@string/common_task"
                     android:textSize="25sp"
@@ -85,7 +97,7 @@
             android:layout_height="wrap_content"
             android:stretchColumns="1">
             <TableRow
-                android:background="@color/blue_grey_700">
+                android:background="@color/bar">
                 <TextView
                     android:text="@string/private_task"
                     android:textSize="25sp"
@@ -118,7 +130,6 @@
 
 
     </LinearLayout>
-    <!--</com.example.administrator.task.RefreshableView>-->
 
 </ScrollView>
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

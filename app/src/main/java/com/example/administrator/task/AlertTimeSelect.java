@@ -72,8 +72,12 @@ public class AlertTimeSelect extends DialogFragment {
         Button nButton =  ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_NEGATIVE);
 //        ((AlertDialog) getDialog()).getWindow().setTitleColor(getResources().getColor(R.color.orange));
         pButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
-        pButton.setTextColor(getResources().getColor(R.color.white));
         nButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
+//        pButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
+        pButton.setTextColor(getResources().getColor(R.color.white));
+//        nButton.setBackground(getResources().getDrawable(R.drawable.mybutton));
         nButton.setTextColor(getResources().getColor(R.color.white));
+        pButton.setTextSize(20);
+        nButton.setTextSize(20);
     }
 }

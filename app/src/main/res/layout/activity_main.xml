@@ -22,10 +22,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="40sp"
+            android:textSize="60sp"
             android:textColor="#FFFFFF"
             android:paddingBottom = "20sp"
-            android:paddingTop = "200sp"
+            android:paddingTop = "150sp"
             />
         <TextView
             android:text="@string/app_slogen"
@@ -38,13 +38,13 @@
             />
 
         <!--<Button-->
-            <!--android:id="@+id/view_all_images"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="View All Stream"-->
-            <!--android:onClick="viewAllImages"-->
-            <!--android:enabled="false"-->
-            <!--/>-->
+        <!--android:id="@+id/view_all_images"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="View All Stream"-->
+        <!--android:onClick="viewAllImages"-->
+        <!--android:enabled="false"-->
+        <!--/>-->
 
         <!--<Button-->
         <!--android:layout_width="match_parent"-->
@@ -63,16 +63,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dip"
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="15dip"
                 android:layout_weight="1"
                 android:enabled="false" />
 
             <Button
-            android:id="@+id/sign_out_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sign-out"
-            android:layout_weight="1"
-            android:enabled="false" />
+                android:id="@+id/sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sign-out"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:enabled="false" />
 
             <!--<Button-->
             <!--android:id="@+id/revoke_access_button"-->
@@ -89,6 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
             android:paddingTop="60sp"
+            android:visibility="gone"
             android:text="signed out" />
     </LinearLayout>
 </ScrollView>

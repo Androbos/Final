@@ -319,11 +319,11 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
         if(viewnumber==0) {
             if(!mListView.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
-                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
-                bundle.putInt("PTaskID", PTaskID1.get(P));
+                bundle.putInt("CTaskID", PTaskID1.get(P));
                 bundle.putString("account",accountName);
                 bundle.putString("email", email);
                 if(subtaskid.contains(PTaskID1.get(P))){
@@ -339,11 +339,11 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
         }else if(viewnumber==1){
             if(!mListViewfinish.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
-                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
-                bundle.putInt("PTaskID", PTaskID2.get(P));
+                bundle.putInt("CTaskID", PTaskID2.get(P));
                 bundle.putString("email", email);
                 bundle.putString("account",accountName);
                 if(subtaskid.contains(PTaskID2.get(P))){
@@ -360,11 +360,11 @@ public class AllCommon extends ActionBarActivity implements AdapterView.OnItemCl
         }else if(viewnumber==2){
             if(!mListViewoverdue.isScroll){
                 Log.e(TAG, "onItemClick position=" + position);
-                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(context, com.example.administrator.task.SingleCommonTask.class);
                 Bundle bundle=new Bundle();
                 int P = position;
-                bundle.putInt("PTaskID", PTaskID3.get(P));
+                bundle.putInt("CTaskID", PTaskID3.get(P));
                 bundle.putString("account", accountName);
                 bundle.putString("email", email);
                 if(subtaskid.contains(PTaskID3.get(P))){

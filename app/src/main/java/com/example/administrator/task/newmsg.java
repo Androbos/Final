@@ -2,6 +2,7 @@ package com.example.administrator.task;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -39,8 +40,12 @@ public class newmsg extends Activity {
 
     String accountName;
     String email;
+    Context context =this;
     ArrayList<Integer> newmsgtaskid = new ArrayList<Integer>();
     ArrayList<String> sender = new ArrayList<String>();
+    ArrayList<String> newmsgtaskname = new ArrayList<String>();
+    ArrayList<String> newmsgurl = new ArrayList<String>();
+    ArrayList<Integer> GroupPositions = new ArrayList<Integer>();
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -57,6 +62,9 @@ public class newmsg extends Activity {
         newmsgtaskid=intentstream.getIntegerArrayListExtra("newmsgtaskid");
         sender=intentstream.getStringArrayListExtra("sender");
         email=intentstream.getStringExtra("email");
+        newmsgtaskname=intentstream.getStringArrayListExtra("newmsgtaskname");
+        newmsgurl=intentstream.getStringArrayListExtra("newmsgurl");
+        GroupPositions = intentstream.getIntegerArrayListExtra("groupposition");
 
         ActionBar bar = getActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
@@ -78,16 +86,16 @@ public class newmsg extends Activity {
 
         ArrayList<String> msg= new ArrayList<String>();
         for(int i=0;i<sender.size();i++){
-            msg.add(sender.get(i) + " replies you");
+            msg.add(sender.get(i) + " replies you "+"@ "+newmsgtaskname.get(i));
         }
 
 
         final ListView listView = (ListView) findViewById(R.id.newmsglist);
-
-        SAdapter adapter = new SAdapter(newmsg.this,msg);
+//
+//        SAdapter adapter = new SAdapter(newmsg.this,msg);
 
         // Assign adapter to ListView
-        listView.setAdapter(adapter);
+        listView.setAdapter(new SAdapter2(context,msg,newmsgurl));
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,6 +106,7 @@ public class newmsg extends Activity {
                 params.put("sender", sender.get(position));
                 params.put("receiver", accountName);
                 params.put("taskid", newmsgtaskid.get(position));
+                params.put("groupposition",GroupPositions.get(position));
 
 
                 AsyncHttpClient client = new AsyncHttpClient();
@@ -114,11 +123,13 @@ public class newmsg extends Activity {
                         bundle.putInt("CTaskID", itemValue);
                         bundle.putBoolean("hasJoined", true);
                         bundle.putString("email", email);
+                        bundle.putInt("groupposition",GroupPositions.get(position));
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in,
                                 R.anim.push_left_out);
+                        newmsg.this.finish();
 
                         final TextView load = (TextView) findViewById(R.id.loading);
                         load.setVisibility(View.GONE);

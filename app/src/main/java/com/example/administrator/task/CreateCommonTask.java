@@ -69,6 +69,8 @@ public class CreateCommonTask extends ActionBarActivity implements View.OnClickL
         });
 
 
+
+
         Intent intent = getIntent();
         accountName = intent.getStringExtra("account");
 //        TextView User = (TextView)findViewById(R.id.createCdebug);

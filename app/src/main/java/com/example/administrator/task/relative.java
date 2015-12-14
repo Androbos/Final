@@ -2,6 +2,7 @@ package com.example.administrator.task;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -38,6 +39,7 @@ public class relative extends Activity {
 
     String accountName;
     String email;
+    Context context = this;
     ArrayList<Integer> taskid = new ArrayList<Integer>();
     ArrayList<Integer> subtaskid = new ArrayList<Integer>();
     ArrayList<String> taskname = new ArrayList<String>();
@@ -121,7 +123,7 @@ public class relative extends Activity {
                 SAdapter adapter = new SAdapter(relative.this, taskname);
 
                 // Assign adapter to ListView
-                listView.setAdapter(adapter);
+                listView.setAdapter(new ArrayAdapter<String>(context,R.layout.testview,taskname));
                 // ListView Item Click Listener
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

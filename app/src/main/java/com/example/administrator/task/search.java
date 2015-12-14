@@ -2,6 +2,7 @@ package com.example.administrator.task;
 
 import android.app.ActionBar;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,6 +37,7 @@ public class search extends ActionBarActivity {
 
     String accountName;
     String searchname;
+    Context context =this;
 
     ListView listView;
     Button btn;
@@ -117,7 +120,8 @@ public class search extends ActionBarActivity {
                 SAdapter adapter = new SAdapter(search.this, taskname);
 
                 // Assign adapter to ListView
-                listView.setAdapter(adapter);
+//                listView.setAdapter(adapter);
+                listView.setAdapter(new ArrayAdapter<String>(context,R.layout.testview,taskname));
                 // ListView Item Click Listener
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -194,8 +198,8 @@ public class search extends ActionBarActivity {
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
-                overridePendingTransition(R.anim.push_right_in,
-                        R.anim.push_left_out);
+//                overridePendingTransition(R.anim.push_right_in,
+//                        R.anim.push_left_out);
                 finish();
             }
         });

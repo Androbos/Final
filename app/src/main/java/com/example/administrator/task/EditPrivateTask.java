@@ -195,7 +195,7 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
 //                    System.out.println("here after createtime");
                     EditText ptaskname = (EditText) findViewById(R.id.taskname);
                     EditText ptaskdue = (EditText) findViewById(R.id.taskdue);
-                    EditText ptaskdescription = (EditText) findViewById(R.id.taskdiscript);
+                    EditText ptaskdescription = (EditText) findViewById(R.id.taskdiscrip);
                     ptaskname.setText(PTaskName);
                     ptaskdue.setText(PTaskDue);
                     ptaskdescription.setText(PTaskDiscription);
@@ -222,7 +222,7 @@ public class EditPrivateTask extends ActionBarActivity implements View.OnClickLi
     public void onClick(View v) {
         EditText TaskName =(EditText)findViewById(R.id.taskname);
         EditText TaskDue = (EditText)findViewById(R.id.taskdue);
-        EditText TaskDiscription = (EditText)findViewById(R.id.taskdiscript);
+        EditText TaskDiscription = (EditText)findViewById(R.id.taskdiscrip);
         EditText d =(EditText)findViewById(R.id.d);
         EditText h = (EditText)findViewById(R.id.h);
         EditText m = (EditText)findViewById(R.id.m);

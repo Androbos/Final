@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/dialogcolor"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Alert time before due"/>
+        android:layout_marginTop="30px"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30px"
+        android:text="Alert Time Before Due"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        android:layout_marginBottom="15px"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="170px"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30px"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:text="Days:"/>
 
         <EditText
             android:id="@+id/day"
+            android:background="@drawable/round_edit"
             android:layout_width="match_parent"
+            android:layout_marginRight="30px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -28,16 +42,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        android:layout_marginBottom="15px"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="170px"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginLeft="30px"
+            android:textColor="@color/white"
             android:text="Hours:"/>
 
         <EditText
             android:id="@+id/hour"
             android:layout_width="match_parent"
+            android:layout_marginRight="30px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:background="@drawable/round_edit"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -45,16 +67,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        android:layout_marginBottom="15px"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="170px"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginLeft="30px"
+            android:textStyle="bold"
             android:text="Minutes:"/>
 
         <EditText
             android:id="@+id/minute"
+            android:layout_marginRight="30px"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
             android:layout_width="match_parent"
+            android:background="@drawable/round_edit"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

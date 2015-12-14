@@ -78,5 +78,7 @@ public class AlertEmail extends DialogFragment {
         pButton.setTextColor(getResources().getColor(R.color.white));
         nButton.setBackgroundColor(getResources().getColor(R.color.dialogcolor));
         nButton.setTextColor(getResources().getColor(R.color.white));
+        pButton.setTextSize(20);
+        nButton.setTextSize(20);
     }
 }

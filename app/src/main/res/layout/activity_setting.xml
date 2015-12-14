@@ -14,9 +14,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        android:visibility="gone"
+        android:text="LOADING..." />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +27,7 @@
         android:textSize="40sp"
         android:layout_gravity="center"
         android:gravity="top"
-        android:textColor="@color/yellow_grey"
+        android:textColor="@color/orange"
         android:text="Setting" />
 
     <Switch
@@ -76,10 +78,11 @@
         android:text="Update"
         android:id="@+id/Update"
         android:layout_marginTop="30sp"
-        android:textColor="@color/white"
+        android:textColor="@color/themecolor"
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/mybutton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="80px" />
 
 </LinearLayout>

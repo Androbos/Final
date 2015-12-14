@@ -12,15 +12,16 @@
     tools:context="com.example.administrator.task.SingleCommonTask">
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:id="@+id/loading"
         android:clickable="true"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        android:text="LOADING..." />
 
     <LinearLayout
         android:id="@+id/linear1"
@@ -42,7 +43,8 @@
                 android:layout_weight="4"
                 android:layout_marginBottom="3dip"
                 android:textSize="30sp"
-                android:textColor="@color/orange"
+                android:textStyle="bold"
+                android:textColor="@color/bar"
                 android:text="Task Name" />
 
             <TextView
@@ -51,6 +53,7 @@
                 android:layout_weight="1"
                 android:id="@+id/ctaskcreatetime"
                 android:textColor="@color/white"
+                android:textStyle="italic"
                 android:textSize="15sp"
                 android:text="create time" />
 
@@ -71,19 +74,30 @@
 
     </LinearLayout>
 
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linear9"-->
+        <!--android:layout_below="@id/linear1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="@color/white"-->
+        <!--tools:context=".MainActivity"/>-->
+
     <LinearLayout
         android:id="@+id/linear2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/linear1"
+
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="20dp"
-            android:textColor="@color/white"
-            android:textSize="23sp"
+            android:paddingRight="10dp"
+            android:textColor="@color/due"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:text="Deadline:" />
 
         <TextView
@@ -91,7 +105,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/ctaskdue"
             android:layout_marginBottom="5dip"
-            android:textColor="@color/white"
+            android:textColor="@color/due"
+            android:textStyle="bold"
             android:textSize="20sp"
             android:text="due" />
 
@@ -119,6 +134,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="20dp"
             android:textColor="@color/white"
+
             android:textSize="23sp"
             android:text="Description:" />
 
@@ -126,11 +142,12 @@
 
     <TextView
         android:layout_below="@id/linear3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ctaskdescript"
         android:visibility="gone"
         android:layout_marginBottom="20dip"
+        android:background="@color/discript"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:text="description" />
@@ -169,7 +186,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnWidth="150dp"
-        android:numColumns="8"
+        android:layout_marginLeft="30dp"
+        android:numColumns="6"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
@@ -191,8 +209,8 @@
             android:layout_width="35dp"
             android:layout_height="34dp"
             android:clickable="true"
-            android:tag="plus"
-            android:src="@drawable/ic_add_box_white_18dp"
+            android:tag="minus"
+            android:src="@drawable/ic_indeterminate_check_box_white_24dp"
             />
 
         <TextView
@@ -246,7 +264,7 @@
         android:layout_below="@id/comment_dialog"
         android:id="@+id/comments"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:groupIndicator="@null"
         android:layout_height="wrap_content"/>
 

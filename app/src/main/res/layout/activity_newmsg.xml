@@ -7,15 +7,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
-        android:id="@+id/loading"
-        android:clickable="true"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+    android:layout_width="match_parent"
+    android:id="@+id/loading"
+    android:clickable="true"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_marginBottom="3dip"
+    android:textSize="40sp"
+    android:textColor="@color/white"
+    android:textStyle="bold|italic"
+        android:visibility="gone"
+    android:text="LOADING..." />
 
     <TextView
         android:layout_width="match_parent"
@@ -27,7 +29,7 @@
         android:layout_alignParentLeft="true"
         android:textSize="40sp"
         android:textColor="@color/orange"
-        android:text="New Message" />
+        android:text="New Messages" />
 
     <ListView
         android:id="@+id/newmsglist"

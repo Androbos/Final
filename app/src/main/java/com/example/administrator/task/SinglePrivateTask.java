@@ -51,17 +51,9 @@ public class SinglePrivateTask extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_private_task);
-        final RelativeLayout r1= (RelativeLayout)findViewById(R.id.r1);
-        final LinearLayout l1=(LinearLayout)findViewById(R.id.l1);
-        final LinearLayout l2=(LinearLayout)findViewById(R.id.l2);
-        final LinearLayout l3=(LinearLayout)findViewById(R.id.l3);
+
         final TextView ll =(TextView)findViewById(R.id.loading);
         ll.setVisibility(View.VISIBLE);
-        r1.setVisibility(View.GONE);
-        l1.setVisibility(View.GONE);
-        l2.setVisibility(View.GONE);
-        l3.setVisibility(View.GONE);
-
 
         ActionBar bar = getActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bar)));
@@ -122,7 +114,8 @@ public class SinglePrivateTask extends ActionBarActivity {
                     PTaskdue = jObject.getJSONArray("due").getString(0);
                     PTaskdescription = jObject.getJSONArray("description").getString(0);
 //                    System.out.println("here after Ptaskdescription");
-                    PTaskcreatetime = jObject.getJSONArray("create_time").getString(0);
+                    PTaskcreatetime = jObject.getJSONArray("create_time").getString(0).substring(0,16);
+
 //                    System.out.println("here after createtime");
                     TextView ptaskname = (TextView) findViewById(R.id.ptaskname);
                     TextView ptaskdue = (TextView) findViewById(R.id.ptaskdue);
@@ -134,11 +127,6 @@ public class SinglePrivateTask extends ActionBarActivity {
                     ptaskcreatetime.setText(PTaskcreatetime);
 
                     ll.setVisibility(View.GONE);
-                    r1.setVisibility(View.VISIBLE);
-                    l1.setVisibility(View.VISIBLE);
-                    l2.setVisibility(View.VISIBLE);
-                    l3.setVisibility(View.VISIBLE);
-
 
                 } catch (JSONException j) {
                     System.out.println("JSON Error");

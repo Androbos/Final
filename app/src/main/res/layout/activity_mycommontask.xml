@@ -18,9 +18,10 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginBottom="3dip"
-        android:textSize="30sp"
-        android:textColor="@color/orange"
-        android:text="Loading..." />
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textStyle="bold|italic"
+        android:text="LOADING..." />
 
 
     <TextView
@@ -29,7 +30,7 @@
         android:layout_marginBottom="20dip"
         android:textSize="30sp"
         android:gravity="top"
-        android:textColor="@color/yellow_grey"
+        android:textColor="@color/orange"
         android:text="Common Task I Created" />
 
 

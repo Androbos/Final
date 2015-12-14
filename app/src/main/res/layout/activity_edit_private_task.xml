@@ -18,7 +18,7 @@
         android:textSize="30sp"
         android:gravity="center_horizontal"
         android:textColor="@color/orange"
-        android:text="Edit Private Task" />
+        android:text="New Private Task" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,16 +27,18 @@
         tools:context=".MainActivity">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
+            android:layout_marginBottom="10dip"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Task name:" />
+            android:text="Name:" />
 
         <EditText
             android:id="@+id/taskname"
-            android:layout_height="wrap_content"
+            android:paddingLeft="20px"
+            android:background="@drawable/round_edit"
+            android:layout_height="80px"
             android:layout_width="match_parent"/>
 
     </LinearLayout>
@@ -48,16 +50,18 @@
         tools:context=".MainActivity">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
+            android:layout_marginBottom="10dip"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Task Due:" />
+            android:text="Due:" />
 
         <EditText
             android:id="@+id/taskdue"
-            android:layout_height="wrap_content"
+            android:paddingLeft="20px"
+            android:background="@drawable/round_edit"
+            android:layout_height="80px"
             android:layout_width="match_parent"/>
 
     </LinearLayout>
@@ -66,25 +70,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="10dip"
         tools:context=".MainActivity">
 
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:background="@drawable/mybutton"
+            android:layout_marginLeft="200px"
+            android:textColor="@color/themecolor"
+            android:layout_height="90px"
             android:text="Set Date"
             android:layout_gravity="center"
             />
         <Button
             android:id="@+id/button2"
             android:layout_weight="1"
+            android:background="@drawable/mybutton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textColor="@color/themecolor"
+            android:layout_height="90px"
             android:text="Set Time"
             android:layout_gravity="center"
             />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,44 +106,61 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
+            android:paddingBottom="10px"
+            android:paddingRight="10px"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="Remind before:" />
+            android:textSize="18sp"
+            android:text="Remind Me" />
+
 
         <EditText
             android:id="@+id/d"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:paddingLeft="10px"
+            android:background="@drawable/round_edit"
+            android:layout_height="70px"
+            android:textSize="15sp"
+            android:layout_width="110px"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
+            android:paddingLeft="7px"
+            android:paddingRight="7px"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="day" />
+            android:textSize="18sp"
+            android:text="D" />
         <EditText
             android:id="@+id/h"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:paddingLeft="10px"
+            android:background="@drawable/round_edit"
+            android:layout_height="70px"
+            android:textSize="15sp"
+            android:layout_width="110px"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
+            android:paddingLeft="7px"
+            android:paddingRight="7px"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="hour" />
+            android:textSize="18sp"
+            android:text="H" />
         <EditText
             android:id="@+id/m"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:paddingLeft="10px"
+            android:background="@drawable/round_edit"
+            android:layout_height="70px"
+            android:textSize="15sp"
+            android:layout_width="110px"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="7px"
+            android:paddingRight="7px"
             android:layout_marginBottom="20dip"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="min" />
+            android:textSize="18sp"
+            android:text="M Ahead" />
 
     </LinearLayout>
 
@@ -140,36 +168,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="50dp"
+        android:paddingBottom="20dp"
         tools:context=".MainActivity">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
+            android:layout_marginBottom="10dip"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Task Discription:" />
+            android:text="Task Description:" />
 
         <EditText
-            android:id="@+id/taskdiscript"
-            android:layout_height="100dp"
-            android:layout_width="match_parent"/>
+            android:id="@+id/taskdiscrip"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:minLines="6"
+            android:gravity="top|left"
+            android:maxLines="10"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:background="@drawable/round_edit"
+            android:scrollbars="vertical"
+            android:paddingLeft="10px"
+            />
 
     </LinearLayout>
     <Button
         android:text="Update"
         android:id="@+id/createP"
+        android:background="@drawable/mybutton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/createPdebug"-->
-        <!--android:gravity="bottom"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="20dip"-->
-        <!--android:textSize="30sp"-->
-        <!--android:text="User" />-->
+        android:textColor="@color/themecolor"
+        android:layout_height="90px"/>
 
 </LinearLayout>

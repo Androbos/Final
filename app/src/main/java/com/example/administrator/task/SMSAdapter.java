@@ -55,6 +55,9 @@ public class SMSAdapter extends ArrayAdapter<String> {
         }
         holder.tv1.setText(keys.get(position));
         holder.tv2.setText(body.get(position));
+        if(position%2 == 0){
+            convertView.setBackgroundColor(convertView.getResources().getColor(R.color.discript));
+        }
 
         return convertView;
     }

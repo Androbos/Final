@@ -26,6 +26,8 @@ import android.widget.Toast;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Suggestion extends Activity {
 
@@ -33,6 +35,8 @@ public class Suggestion extends Activity {
     ArrayList<String> keys = new ArrayList<String>();
     ArrayList<String> body = new ArrayList<String>();
     ArrayList<String> contact = new ArrayList<String>();
+    ArrayList<String> time = new ArrayList<String>();
+    ArrayList<String> week = new ArrayList<String>();
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -90,22 +94,22 @@ public class Suggestion extends Activity {
 //                Log.i(TAG, contactId);
 //                Log.i(TAG, name);
 
-                //=================================
-                Uri uri = Uri.parse(SMS_URI_INBOX);
-                String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-                Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");        // 获取手机内部短信
+            //=================================
+            Uri uri = Uri.parse(SMS_URI_INBOX);
+            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
+            Cursor cur = getContentResolver().query(uri, projection, null, null, "date desc");        // 获取手机内部短信
 
-                if (cur.moveToFirst()) {
+            if (cur.moveToFirst()) {
 //                int index_Address = cur.getColumnIndex("address");
-                    int index_Person = cur.getColumnIndex("person");
-                    int index_Body = cur.getColumnIndex("body");
+                int index_Person = cur.getColumnIndex("person");
+                int index_Body = cur.getColumnIndex("body");
 //                int index_Date = cur.getColumnIndex("date");
 //                int index_Type = cur.getColumnIndex("type");
 
-                    do {
+                do {
 //                    String strAddress = cur.getString(index_Address);
-                        int intPerson = cur.getInt(index_Person);
-                        String strbody = cur.getString(index_Body);
+                    int intPerson = cur.getInt(index_Person);
+                    String strbody = cur.getString(index_Body);
 //                    long longDate = cur.getLong(index_Date);
 //                    int intType = cur.getInt(index_Type);
 
@@ -114,52 +118,94 @@ public class Suggestion extends Activity {
 //                    String strDate = dateFormat.format(d);
 
 
-                        ArrayList<String> keyword = new ArrayList<String>();
-                        keyword.add("Meeting");
-                        keyword.add("meeting");
-                        keyword.add("Appointment");
-                        keyword.add("appointment");
-                        keyword.add("Invitation");
-                        keyword.add("invitation");
-                        keyword.add("Visit");
-                        keyword.add("visit");
-                        keyword.add("Class");
-                        keyword.add("class");
-                        keyword.add("Exam");
-                        keyword.add("exam");
-                        keyword.add("Test");
-                        keyword.add("test");
-                        keyword.add("Presentation");
-                        keyword.add("presentation");
-                        keyword.add("Due");
-                        keyword.add("due");
-                        keyword.add("Deadline");
-                        keyword.add("deadline");
-                        keyword.add("Bill");
-                        keyword.add("bill");
-                        keyword.add("Party");
-                        keyword.add("party");
-                        keyword.add("Conference");
-                        keyword.add("conference");
+                    ArrayList<String> keyword = new ArrayList<String>();
+                    keyword.add("Meeting");
+                    keyword.add("meeting");
+                    keyword.add("Appointment");
+                    keyword.add("appointment");
+                    keyword.add("Invitation");
+                    keyword.add("invitation");
+                    keyword.add("Visit");
+                    keyword.add("visit");
+                    keyword.add("Class");
+                    keyword.add("class");
+                    keyword.add("Exam");
+                    keyword.add("exam");
+                    keyword.add("Test");
+                    keyword.add("test");
+                    keyword.add("Presentation");
+                    keyword.add("presentation");
+                    keyword.add("Due");
+                    keyword.add("due");
+                    keyword.add("Deadline");
+                    keyword.add("deadline");
+                    keyword.add("Bill");
+                    keyword.add("bill");
+                    keyword.add("Party");
+                    keyword.add("appt");
+                    keyword.add("party");
+                    keyword.add("Conference");
+                    keyword.add("conference");
+                    ArrayList<String> weekday =new ArrayList<String>();
+                    weekday.add("Monday");
+                    weekday.add("Tuesday");
+                    weekday.add("Wednesday");
+                    weekday.add("Thursday");
+                    weekday.add("Friday");
+                    weekday.add("Saturday");
+                    weekday.add("Sunday");
+                    weekday.add("Mon");
+                    weekday.add("Tue");
+                    weekday.add("Wed");
+                    weekday.add("Thu");
+                    weekday.add("Fri");
+                    weekday.add("Sat");
+                    weekday.add("Sun");
 
-                        for (int i = 0; i < keyword.size(); i++) {
-                            if (strbody.contains(keyword.get(i))) {
-                                body.add(strbody);
-                                keys.add("  "+keyword.get(i));
-                                break;
+
+                    for (int i = 0; i < keyword.size(); i++) {
+                        if (strbody.contains(keyword.get(i))) {
+                            body.add(strbody);
+                            keys.add(keyword.get(i));
+
+                            for (int j =0;j<weekday.size();j++){
+                                if(strbody.contains(weekday.get(j))){
+                                    week.add(weekday.get(j));
                                 }
-
                             }
 
-                    } while (cur.moveToNext());
+                            if(week.size()<i){
+                                week.add("");
+                            }
 
-                    if (!cur.isClosed()) {
-                        cur.close();
-                        cur = null;
+
+
+                            String pattern = "\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}?";
+
+                            // Create a Pattern object
+                            Pattern r = Pattern.compile(pattern);
+                            // Now create matcher object.
+                            Matcher m = r.matcher(strbody);
+                            if (m.find()) {
+                                time.add(m.group(0));
+                            } else {
+                                time.add("");
+                            }
+
+                            break;
+                        }
+
                     }
-                }
 
-                //=======================
+                } while (cur.moveToNext());
+
+                if (!cur.isClosed()) {
+                    cur.close();
+                    cur = null;
+                }
+            }
+
+            //=======================
 
 
 
@@ -184,6 +230,8 @@ public class Suggestion extends Activity {
                 bundle.putString("account", accountName);
                 bundle.putString("name",keys.get(position));
                 bundle.putString("des", body.get(position));
+                bundle.putString("time",time.get(position));
+                bundle.putString("week",week.get(position));
                 intent.putExtras(bundle);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
